@@ -1,14 +1,18 @@
 'use client'
-import { TextHoverEffect } from "@/components/ui/text-hover-effect";
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { useState, useRef, useEffect } from 'react'
-import { ArrowUpRight, Github, Linkedin, Mail, Twitter, ChevronRight, Check, ShoppingBag, Palette } from 'lucide-react'
-import { Cover } from "@/components/ui/cover";
-import { BentoGridThirdDemo } from "@/components/ui/bento-grid";
-import { NoiseBackground } from "@/components/ui/noise-background";
-import { FeaturesSectionDemo } from "@/components/features-section-demo-2";
-import { PointerHighlight } from "@/components/ui/pointer-highlight";
-
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import {
+    ArrowUpRight, Mail, Github, Linkedin, Twitter,
+    ChevronRight, Check, ShoppingBag, Palette,
+    Globe, Monitor, LayoutDashboard, Briefcase, Rocket, Code2,
+    Youtube, Instagram, Search,
+    PenTool, Figma, Server, Cpu
+} from 'lucide-react'
+import Image from 'next/image'
+import { AuroraText } from "@/components/ui/aurora-text"
+import AuroraBackgroundDemo from "@/components/aurora-background-demo"
+import MagneticButtonDemo from '@/components/magnetic-button-demo';
+import { audio } from 'framer-motion/m';
 // --- CAL.COM INTEGRATION ---
 const useCalEmbed = () => {
     useEffect(() => {
@@ -48,338 +52,367 @@ const getCalApi = () =>
         resolve(window.Cal);
     });
 
-// --- TECH STACK COLOR MAPPING ---
-const techColors = {
-    'Next.js': 'hover:text-[#000000]',
-    'React': 'hover:text-[#61DAFB]',
-    'Node.js': 'hover:text-[#339933]',
-    'MongoDB': 'hover:text-[#47A248]',
-    'Tailwind': 'hover:text-[#06B6D4]',
-    'Razorpay': 'hover:text-[#3395FF]',
-    'Framer Motion': 'hover:text-[#FF0088]',
-    'TypeScript': 'hover:text-[#3178C6]',
-    'EmailJS': 'hover:text-[#0091FF]',
-    'Stripe': 'hover:text-[#635BFF]',
-    'Zustand': 'hover:text-[#000000]',
-    'AWS': 'hover:text-[#FF9900]',
-    'Vercel': 'hover:text-[#000000]',
-    'Netlify': 'hover:text-[#00C7B7]',
-    'Docker': 'hover:text-[#2496ED]',
-    'Redis': 'hover:text-[#DC382D]',
+
+// ── COLORS ────────────────────────────────────────────
+const C = {
+    dark: '#1a1a1a',
+    body: '#3d3d3d',
+    muted: '#6b6b6b',
+    accent: '#55655a',
+    accentLight: '#708775',
+    bg: '#fafaf9',
+    bgAlt: '#f3f2ef',
+    card: '#ffffff',
+    border: '#e5e4e0',
 }
+
+
+// ── DATA ──────────────────────────────────────────────
+
+const services = [
+    {
+        icon: <Code2 className="w-5 h-5" />,
+        title: 'Website Development',
+        description: 'We build all types of websites. Online stores, business websites, personal portfolios, landing pages, or custom dashboards. You name it, we build it.',
+        illustration: '/svgs/undraw_system-update_pc33.svg',
+    },
+    {
+        icon: <Rocket className="w-5 h-5" />,
+        title: 'Ad Campaigns',
+        description: 'We run your ads on YouTube, Instagram, and Google. We handle the targeting, the creatives, and the budget so your ads reach the right people.',
+        illustration: '/svgs/undraw_online-ad_703t.svg',
+    },
+    {
+        icon: <Globe className="w-5 h-5" />,
+        title: 'Digital Marketing',
+        description: 'We help your brand grow online. SEO to rank on Google, content that people actually read, and social media that builds a real audience.',
+        illustration: '/svgs/undraw_marketing-analysis_2u5r.svg',
+    }
+]
+
+const websiteTypes = [
+    { icon: <ShoppingBag className="w-5 h-5" />, name: 'Online Stores', desc: 'Sell products online with payments, inventory, and delivery tracking.' },
+    { icon: <Monitor className="w-5 h-5" />, name: 'SaaS Platforms', desc: 'Web apps with login, subscription billing, and user dashboards.' },
+    { icon: <Briefcase className="w-5 h-5" />, name: 'Business Websites', desc: 'Professional websites that make your company look credible and trustworthy.' },
+    { icon: <Palette className="w-5 h-5" />, name: 'Portfolio Sites', desc: 'Beautiful websites to showcase your work, photography, or design projects.' },
+    { icon: <Rocket className="w-5 h-5" />, name: 'Landing Pages', desc: 'Single-page websites designed to get people to sign up or buy.' },
+    { icon: <LayoutDashboard className="w-5 h-5" />, name: 'Admin Panels', desc: 'Custom dashboards to manage your orders, users, and business data.' },
+]
+
+const adPlatforms = [
+    {
+        icon: <Youtube className="w-7 h-7" />,
+        name: 'YouTube Ads',
+        color: '#FF0000',
+        description: 'Video ads that show up before, during, or after YouTube videos. Great for brand awareness and reaching millions of viewers.',
+        illustration: '/svgs/undraw_make-it-rain_ylfg.svg',
+    },
+    {
+        icon: <Instagram className="w-7 h-7" />,
+        name: 'Instagram Ads',
+        color: '#E1306C',
+        description: 'Ads in Reels, Stories, and feed posts. Perfect for fashion, food, lifestyle, and any visual brand that wants to grow fast.',
+        illustration: '/svgs/undraw_revenue-analysis_fjh2.svg',
+    },
+    {
+        icon: <Search className="w-7 h-7" />,
+        name: 'Google Ads',
+        color: '#4285F4',
+        description: 'Show up at the top of Google when people search for your service. You only pay when someone clicks. Best for getting customers who are ready to buy.',
+        illustration: '/svgs/undraw_growth-chart_4iho.svg',
+    }
+]
+
+const teamMembers = [
+    { role: 'Content Writer', icon: <PenTool className="w-5 h-5" />, description: 'Writes the words on your website and ads that make people take action.' },
+    { role: 'Design Engineer', icon: <Figma className="w-5 h-5" />, description: 'Turns designs into real, working, interactive websites.' },
+    { role: 'UI/UX Designer', icon: <Palette className="w-5 h-5" />, description: 'Makes sure your website looks great and is easy for everyone to use.' },
+    { role: 'Forward Deployed Engineer', icon: <Cpu className="w-5 h-5" />, description: 'Works directly with you to build exactly what your business needs.' },
+    { role: 'System Design Engineer', icon: <Server className="w-5 h-5" />, description: 'Builds the backend so your website stays fast even with heavy traffic.' },
+]
+
+const projects = [
+    {
+        id: 1,
+        name: 'Vastu Mentor',
+        category: 'Online Store',
+        description: 'A complete Vastu consultation and product shopping website. Customers can buy products, pay online via Razorpay, and track their orders.',
+        tech: ['Next.js', 'MongoDB', 'Razorpay', 'Node.js', 'Shiprocket'],
+        link: 'https://vastumentor.com',
+        year: '2026'
+    },
+    {
+        id: 2,
+        name: 'MuskySnax',
+        category: 'Food Brand',
+        description: 'A premium snack delivery website. Customers place orders, get real-time delivery updates via email, and the brand manages everything from one dashboard.',
+        tech: ['Next.js', 'Tailwind', 'Framer Motion'],
+        link: 'https://muskysnax.in',
+        year: '2025'
+    },
+]
+
+
+// ── SECTION LABEL ─────────────────────────────────────
+
+function SectionLabel({ children }) {
+    return (
+        <span className="inline-flex items-center gap-3 text-[11px] tracking-[0.25em] uppercase font-semibold mb-5"
+            style={{ color: C.accentLight }}>
+            <span className="w-6 h-[2px] rounded-full" style={{ backgroundColor: C.accentLight }} />
+            {children}
+        </span>
+    )
+}
+
+
+// ── MAIN COMPONENT ────────────────────────────────────
 
 export default function Home() {
     const [hoveredProject, setHoveredProject] = useState(null)
-    const [isTeamHovered, setIsTeamHovered] = useState(false)
-    const containerRef = useRef(null)
-    const { scrollYProgress } = useScroll()
-    const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0])
 
     useCalEmbed()
 
-    const projects = [
-        {
-            id: 1,
-            name: 'Vastu Mentor',
-            category: 'E-Commerce',
-            description: 'End-to-end Vastu consultation platform with integrated e-commerce, Razorpay payments, and custom admin dashboard.',
-            tech: ['Next.js', 'MongoDB', 'Razorpay', 'NodeJS', 'Shiprocket'],
-            link: 'https://vastumentor.com',
-            year: '2026'
-        },
-        {
-            id: 2,
-            name: 'MuskySnax',
-            category: 'D2C Food Brand',
-            description: 'Premium snack delivery platform featuring real-time order tracking, Shiprocket logistics, and automated email workflows.',
-            tech: ['Next.js', 'Tailwind', 'Framer', 'Motion'],
-            link: 'https://muskysnax.in',
-            year: '2025'
-        },
-    ]
-
-    const services = [
-        'Full-Stack Development',
-        'E-commerce Architecture',
-        'Payment Gateway Integration',
-        'API Development',
-        'Admin Dashboards',
-        'Performance Optimization'
-    ]
-
-    const teamMembers = [
-        { role: "Content Writer", img: "https://i.pravatar.cc/100?u=a" },
-        { role: "Staff Engineer", img: "https://i.pravatar.cc/100?u=b" },
-        { role: "Design Engineer", img: "https://i.pravatar.cc/100?u=c" },
-        { role: "UI/UX", img: "https://i.pravatar.cc/100?u=d" }
-    ]
+    const fadeIn = {
+        hidden: { opacity: 0, y: 24 },
+        visible: (d = 0) => ({
+            opacity: 1, y: 0,
+            transition: { duration: 0.5, delay: d, ease: [0.25, 0.1, 0.25, 1] }
+        })
+    }
 
     return (
-        <div ref={containerRef} className="bg-[#fafaf9] text-[#1a1a1a] min-h-screen antialiased overflow-x-hidden  font-sans" style={{ fontWeight: 400 }}>
+        <div className="min-h-screen antialiased overflow-x-hidden" style={{ backgroundColor: C.bg, color: C.dark }}>
 
-            {/* Light Mode Navigation */}
+            {/* ── NAV ── */}
             <motion.nav
-                initial={{ y: -100 }}
+                initial={{ y: -80 }}
                 animate={{ y: 0 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="fixed top-0 w-full z-50 backdrop-blur-md bg-[#fafaf9]/80 border-b border-[#1a1a1a]/5"
+                transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+                className="fixed top-0 w-full z-50 backdrop-blur-xl"
+                style={{ backgroundColor: `${C.bg}e6`, borderBottom: `1px solid ${C.border}` }}
             >
-                <div className="max-w-[90rem] mx-auto px-5 sm:px-8 md:px-16 py-5 sm:py-6 md:py-8 flex justify-between items-center">
-                    <div className="text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] text-[#1a1a1a] font-medium">
-                        THEADROITDEV
+                <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                    <span className="text-[13px] tracking-[0.18em] font-bold uppercase" style={{ color: C.dark }}>
+                        <Image alt="logo" src={"/logo-v3.png"} width={100} height={100}/>
+                    </span>
+                    <div className="hidden md:flex items-center gap-8">
+                        {['Services', 'Team', 'Projects', 'Contact'].map(l => (
+                            <a key={l} href={`#${l.toLowerCase()}`}
+                                className="text-[14px] tracking-[0.12em] font-medium transition-colors duration-200 hover:opacity-100"
+                                style={{ color: C.muted }}
+                                onMouseEnter={e => e.target.style.color = C.dark}
+                                onMouseLeave={e => e.target.style.color = C.muted}>
+                                {l}
+                            </a>
+                        ))}
                     </div>
-                    <a
-                        href="#contact"
-                        className="text-xs sm:text-sm tracking-[0.15em] sm:tracking-widest hover:tracking-[0.3em] transition-all duration-500 touch-manipulation min-h-[44px] flex items-center text-[#1a1a1a] font-normal"
-                    >
-                        CONTACT
+                    <a href="#contact"
+                     >
+                        <MagneticButtonDemo/>
                     </a>
                 </div>
             </motion.nav>
 
-            {/* Hero Section */}
-            <section className="min-h-[100svh] flex items-center justify-center relative px-5 sm:px-8 md:px-16 pt-20 sm:pt-24">
+                    <AuroraBackgroundDemo/>
+      
 
-                {/* Grid Background */}
-                <div
-                    className="absolute inset-0 z-0 pointer-events-none"
-                    style={{
-                        backgroundImage: 'linear-gradient(#e5e5e5 1px, transparent 1px), linear-gradient(90deg, #e5e5e5 1px, transparent 1px)',
-                        backgroundSize: '40px 40px',
-                        opacity: 0.4
-                    }}
-                />
 
-                <motion.div
-                    style={{ opacity }}
-                    className="absolute inset-0 pointer-events-none z-[1]"
-                >
-                    <div className="absolute top-1/4 right-1/4 w-[300px] sm:w-[400px] md:w-[600px] h-[300px] sm:h-[400px] md:h-[600px] bg-amber-400/10 rounded-full blur-[80px] sm:blur-[100px] md:blur-[120px]" />
-                    <div className="absolute bottom-1/3 left-1/4 w-[250px] sm:w-[350px] md:w-[500px] h-[250px] sm:h-[350px] md:h-[500px] bg-orange-300/10 rounded-full blur-[80px] sm:blur-[100px] md:blur-[120px]" />
-                </motion.div>
-
-                <div className="max-w-[90rem] mx-auto w-full relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1.2, delay: 0.3 }}
-                        className="space-y-8 sm:space-y-10 md:space-y-12"
-                    >
-                        <div className="overflow-hidden">
-                            <motion.h1
-                                initial={{ y: 100, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                                className="font-normal md:font-light leading-[0.85] tracking-tighter text-[#1a1a1a]"
-                                style={{ fontSize: 'clamp(3.5rem, 15vw, 16rem)' }}
-                            >
-                                SHIVAM
-                            </motion.h1>
-                        </div>
-
-                        <div className="overflow-hidden">
-                            <motion.h1
-                                initial={{ y: 100, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ duration: 1, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                                className="font-normal md:font-light leading-[0.85] tracking-tighter text-right bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent"
-                                style={{ fontSize: 'clamp(3.5rem, 15vw, 16rem)' }}
-                            >
-                                VERMA
-                            </motion.h1>
-                        </div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 1.2 }}
-                            className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 pt-8 sm:pt-12 md:pt-16"
-                        >
-
-                            {/* LEFT SIDE: TEAMS INTERACTION + AVAILABLE (Replaces the paragraph) */}
-                            <div className="flex flex-col items-start gap-4">
-
-                                {/* TEAMS MICRO-INTERACTION (Prominent placement) */}
-                                <div
-                                    className="relative inline-block"
-                                    onMouseEnter={() => setIsTeamHovered(true)}
-                                    onMouseLeave={() => setIsTeamHovered(false)}
-                                >
-                                    <div className="flex items-center gap-2 cursor-pointer group px-4 py-2 bg-white/50 backdrop-blur-sm border border-black/5 rounded-full hover:border-black/20 transition-all shadow-sm">
-                                        <span className="text-sm font-medium text-[#4a4a4a] group-hover:text-[#1a1a1a] transition-colors">
-                                            Collaborating with Teams
-                                        </span>
-                                        <div className="flex -space-x-2">
-                                            {teamMembers.slice(0, 3).map((m, i) => (
-                                                <div key={i} className="w-5 h-5 rounded-full ring-2 ring-white overflow-hidden">
-                                                    <img src={m.img} className="w-full h-full object-cover" />
-                                                </div>
-                                            ))}
-                                            <div className="w-5 h-5 rounded-full ring-2 ring-white bg-gray-100 flex items-center justify-center text-[8px] font-bold">+1</div>
-                                        </div>
-                                    </div>
-
-                                    <AnimatePresence>
-                                        {isTeamHovered && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                                                className="absolute left-0 top-12 bg-white/95 backdrop-blur-xl shadow-2xl rounded-2xl p-4 border border-gray-100 flex gap-4 min-w-[280px] z-50"
-                                            >
-                                                {teamMembers.map((member, i) => (
-                                                    <motion.div
-                                                        key={i}
-                                                        initial={{ opacity: 0, y: 10 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        transition={{ delay: i * 0.05 }}
-                                                        className="flex flex-col items-center gap-2"
-                                                    >
-                                                        <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-gray-100">
-                                                            <img src={member.img} alt={member.role} className="w-full h-full object-cover" />
-                                                        </div>
-                                                        <span className="text-[9px] uppercase tracking-wider text-center font-bold text-gray-500 w-16 leading-tight">
-                                                            {member.role}
-                                                        </span>
-                                                    </motion.div>
-                                                ))}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-
-                                <div className="flex items-center gap-3 text-sm text-[#6a6a6a] font-normal pl-1">
-                                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                                    <span className="tracking-widest">AVAILABLE FOR WORK</span>
-                                </div>
-                            </div>
-
-                        </motion.div>
+            {/* ── SERVICES ── */}
+            <section id="services" className="py-28 sm:py-36 px-6">
+                <div className="max-w-6xl mx-auto">
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
+                        {/* <SectionLabel>What We Do</SectionLabel> */}
+                        <h2 className="text-2xl sm:text-[2.5rem] text-center font-bold tracking-tight leading-snug mt-1 mb-14" style={{ color: C.dark }}>
+                        Everything your business needs<br className="hidden sm:block" />  <AuroraText>   to grow online.</AuroraText>
+                        </h2>
                     </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        {services.map((s, i) => (
+                            <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                                variants={fadeIn} custom={i * 0.1}
+                                className="group rounded-2xl p-7 sm:p-8 transition-all duration-300 shadow-md"
+                                style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
+
+                                <div className="flex items-center justify-between mb-5">
+                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center"
+                                        style={{ backgroundColor: `${C.accent}12`, color: C.accent }}>
+                                        {s.icon}
+                                    </div>
+                                    <Image src={s.illustration} alt={s.title} width={48} height={48} className="opacity-50 group-hover:opacity-80 transition-opacity" />
+                                </div>
+                                <h3 className="text-[17px] font-bold mb-3" style={{ color: C.dark }}>{s.title}</h3>
+                                <p className="text-[14px] leading-[1.75]" style={{ color: C.body }}>{s.description}</p>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
-            {/* Tech Stack Marquee with Specific Colors */}
-            <div className="border-y border-[#1a1a1a]/10 overflow-hidden py-4 sm:py-5 md:py-6 bg-white/50 relative z-10 group">
-                <style jsx>{`
-          .group:hover .marquee-content {
-            animation-play-state: paused;
-          }
-        `}</style>
-                <motion.div
-                    className="marquee-content flex gap-8 sm:gap-12 md:gap-16 whitespace-nowrap"
-                    animate={{ x: [0, -1920] }}
-                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                >
-                    {/* Tech list repeated 3 times for smoothness */}
-                    {[...Array(3)].flatMap(() => Object.keys(techColors)).map((tech, i) => (
-                        <span
-                            key={i}
-                            className={`tracking-wider font-normal md:font-light transition-colors duration-300 cursor-default text-[#d4d4d4] ${techColors[tech]}`}
-                            style={{ fontSize: 'clamp(1.25rem, 4vw, 2rem)' }}
-                        >
-                            {tech}
-                        </span>
-                    ))}
-                </motion.div>
-            </div>
 
-            {/* Start a Project / Pricing Flow */}
-            <section className="py-20 sm:py-28 md:py-32 px-5 sm:px-8 md:px-16 relative z-10 bg-[#f4f4f4]">
-                <div className="max-w-[90rem] mx-auto">
-                    <div className="mb-12 sm:mb-16">
-                        <span className="flex items-center gap-3 text-xs sm:text-sm tracking-[0.25em] sm:tracking-[0.3em] text-[#1a1a1a] uppercase font-bold">
-                            <span className="w-8 h-[1px] bg-[#1a1a1a]"></span>
-                            Build a <PointerHighlight><span className="p-1">Product</span></PointerHighlight>
-                        </span>
+            {/* ── WEBSITES WE BUILD ── */}
+            <section className="py-28 sm:py-36 px-6" style={{ backgroundColor: C.bgAlt }}>
+                <div className="max-w-6xl mx-auto">
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
+                        <SectionLabel>Websites We Build</SectionLabel>
+                        <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1 mb-14" style={{ color: C.dark }}>
+                            Tell us what you need.<br className="hidden sm:block" /> We will build it.
+                        </h2>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {websiteTypes.map((t, i) => (
+                            <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                                variants={fadeIn} custom={i * 0.07}
+                                className="group flex items-center gap-4 rounded-xl px-5 py-5 transition-all duration-300 hover:shadow-sm"
+                                style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
+                                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300"
+                                    style={{ backgroundColor: `${C.accent}0a`, color: C.muted }}
+                                    onMouseEnter={e => { e.currentTarget.style.color = C.accent }}
+                                    onMouseLeave={e => { e.currentTarget.style.color = C.muted }}>
+                                    {t.icon}
+                                </div>
+                                <div>
+                                    <h4 className="text-[14px] font-bold" style={{ color: C.dark }}>{t.name}</h4>
+                                    <p className="text-[13px] leading-snug mt-0.5" style={{ color: C.muted }}>{t.desc}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+
+            {/* ── AD PLATFORMS ── */}
+            <section className="py-28 sm:py-36 px-6">
+                <div className="max-w-6xl mx-auto">
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
+                        <SectionLabel>We Run Your Ads</SectionLabel>
+                        <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1 mb-14" style={{ color: C.dark }}>
+                            We put your brand in front<br className="hidden sm:block" /> of the right people.
+                        </h2>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        {adPlatforms.map((p, i) => (
+                            <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                                variants={fadeIn} custom={i * 0.1}
+                                className="group rounded-2xl p-7 sm:p-8 transition-all duration-300 hover:shadow-md overflow-hidden relative"
+                                style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
+
+                                <div className="flex items-center justify-between mb-5">
+                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center"
+                                        style={{ backgroundColor: `${p.color}10`, color: p.color }}>
+                                        {p.icon}
+                                    </div>
+                                </div>
+                                <h3 className="text-lg font-bold mb-2" style={{ color: C.dark }}>{p.name}</h3>
+                                <p className="text-[14px] leading-[1.75] mb-5" style={{ color: C.body }}>{p.description}</p>
+
+                                <div className="flex justify-end opacity-40 group-hover:opacity-60 transition-opacity duration-500">
+                                    <Image src={p.illustration} alt={p.name} width={120} height={80} className="select-none" />
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+
+            {/* ── TEAM ── */}
+            <section id="team" className="py-28 sm:py-36 px-6" style={{ backgroundColor: C.bgAlt }}>
+                <div className="max-w-6xl mx-auto">
+
+                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
+                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
+                            <SectionLabel>Our Team</SectionLabel>
+                            <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1 mb-3" style={{ color: C.dark }}>
+                                A team of specialists<br className="hidden sm:block" /> behind every project.
+                            </h2>
+                            <p className="text-[15px] max-w-lg leading-[1.75]" style={{ color: C.body }}>
+                                You don't just get one developer. You get a full team of experts working together to deliver the best possible result.
+                            </p>
+                        </motion.div>
+                        <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 0.2 }}
+                            className="hidden lg:block flex-shrink-0">
+                            <Image src="/svgs/undraw_collaboration_hkrb.svg" alt="Team" width={220} height={160} className="opacity-60 select-none" />
+                        </motion.div>
                     </div>
 
-                    <PricingFlow />
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                        {teamMembers.map((m, i) => (
+                            <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                                variants={fadeIn} custom={i * 0.08}
+                                className="group rounded-xl p-5 text-center transition-all duration-300 hover:shadow-sm"
+                                style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
+                                <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform duration-300"
+                                    style={{ backgroundColor: `${C.accent}12`, color: C.accent }}>
+                                    {m.icon}
+                                </div>
+                                <h4 className="text-[13px] font-bold leading-tight mb-1.5" style={{ color: C.dark }}>{m.role}</h4>
+                                <p className="text-[12px] leading-snug" style={{ color: C.muted }}>{m.description}</p>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
-            {/* Projects Section */}
-            <section id="projects" className="py-20 sm:py-28 md:py-40 px-5 sm:px-8 md:px-16 relative z-10">
-                <div className="max-w-[90rem] mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="mb-16 sm:mb-24 md:mb-32"
-                    >
-                        <span className="flex items-center gap-3 text-xs sm:text-sm tracking-[0.25em] sm:tracking-[0.3em] text-[#1a1a1a] uppercase font-bold">
-                            <span className="w-8 h-[1px] bg-[#1a1a1a]"></span>
-                            Selected <PointerHighlight><span className="p-1">Projects</span></PointerHighlight>
-                        </span>
+
+            {/* ── PROJECTS ── */}
+            <section id="projects" className="py-28 sm:py-36 px-6">
+                <div className="max-w-6xl mx-auto">
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0} className="mb-16">
+                        <SectionLabel>Our Work</SectionLabel>
+                        <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1" style={{ color: C.dark }}>
+                            Projects we have delivered.
+                        </h2>
                     </motion.div>
 
                     <div className="space-y-0">
                         {projects.map((project, idx) => (
                             <motion.div
                                 key={project.id}
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.8, delay: idx * 0.1 }}
+                                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: idx * 0.1 }}
                                 onMouseEnter={() => setHoveredProject(project.id)}
                                 onMouseLeave={() => setHoveredProject(null)}
-                                className="group border-b border-[#1a1a1a]/10 py-12 sm:py-16 md:py-20 active:bg-[#1a1a1a]/[0.02] md:hover:bg-[#1a1a1a]/[0.02] transition-all duration-700"
+                                className="group py-10 sm:py-14 first:border-t -mx-6 px-6 transition-colors duration-300"
+                                style={{ borderBottom: `1px solid ${C.border}` }}
                             >
-                                <a
-                                    href={project.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block touch-manipulation"
-                                >
-                                    <div className="flex flex-col gap-6 sm:gap-8 md:flex-row md:items-center md:justify-between md:gap-16">
-                                        <div className="flex-1 space-y-4 sm:space-y-5 md:space-y-6">
-                                            <div className="flex items-start sm:items-baseline gap-3 sm:gap-4 md:gap-6">
-                                                <h3
-                                                    className="font-normal md:font-light tracking-tight group-hover:tracking-tighter group-active:text-amber-600 md:group-hover:text-amber-600 transition-all duration-700 leading-[0.9] text-[#1a1a1a]"
-                                                    style={{ fontSize: 'clamp(2rem, 8vw, 5rem)' }}
-                                                >
+                                <a href={project.link} target="_blank" rel="noopener noreferrer" className="block">
+                                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-12">
+                                        <div className="flex-1 space-y-3">
+                                            <div className="flex items-baseline gap-3">
+                                                <h3 className="font-bold tracking-tight transition-colors duration-300"
+                                                    style={{
+                                                        fontSize: 'clamp(1.75rem, 5vw, 3.5rem)',
+                                                        lineHeight: 1,
+                                                        color: hoveredProject === project.id ? C.accent : C.dark
+                                                    }}>
                                                     {project.name}
                                                 </h3>
                                                 <motion.div
-                                                    animate={{
-                                                        x: hoveredProject === project.id ? 10 : 0,
-                                                        y: hoveredProject === project.id ? -10 : 0
-                                                    }}
-                                                    transition={{ duration: 0.3 }}
-                                                    className="flex-shrink-0 mt-1"
-                                                >
-                                                    <ArrowUpRight
-                                                        className="w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 text-amber-600 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"
-                                                    />
+                                                    animate={{ x: hoveredProject === project.id ? 4 : 0, y: hoveredProject === project.id ? -4 : 0 }}
+                                                    transition={{ duration: 0.2 }}>
+                                                    <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                        style={{ color: C.accent }} />
                                                 </motion.div>
                                             </div>
-
-                                            <p
-                                                className="text-[#4a4a4a] max-w-2xl leading-relaxed group-active:text-[#2a2a2a] md:group-hover:text-[#2a2a2a] transition-colors duration-500 font-normal"
-                                                style={{ fontSize: 'clamp(0.9rem, 2.5vw, 1.125rem)' }}
-                                            >
-                                                {project.description}
-                                            </p>
-
-                                            <div className="flex flex-wrap gap-3 sm:gap-4 text-xs sm:text-sm text-[#6a6a6a] font-normal">
+                                            <p className="max-w-xl text-[14px] leading-[1.75]" style={{ color: C.body }}>{project.description}</p>
+                                            <div className="flex flex-wrap gap-2 pt-1">
                                                 {project.tech.map((t, i) => (
-                                                    <span key={i} className="tracking-wider px-3 py-1 bg-[#1a1a1a]/5 rounded-full">
+                                                    <span key={i} className="text-[11px] tracking-wider font-medium px-2.5 py-1 rounded-md"
+                                                        style={{ backgroundColor: `${C.accent}0a`, color: C.muted }}>
                                                         {t}
                                                     </span>
                                                 ))}
                                             </div>
                                         </div>
-
-                                        <div className="flex flex-row sm:flex-col items-center sm:items-start md:items-end gap-3 text-xs sm:text-sm font-normal">
-                                            <span className="text-[#6a6a6a] tracking-[0.15em] sm:tracking-[0.2em]">{project.category}</span>
-                                            <span
-                                                className="text-amber-600/60 font-normal md:font-light"
-                                                style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)' }}
-                                            >
-                                                {project.year}
-                                            </span>
+                                        <div className="flex md:flex-col items-center md:items-end gap-2 text-right">
+                                            <span className="text-[11px] tracking-[0.18em] uppercase font-semibold" style={{ color: C.accentLight }}>{project.category}</span>
+                                            <span className="font-semibold text-2xl sm:text-3xl" style={{ color: `${C.accent}60` }}>{project.year}</span>
                                         </div>
                                     </div>
                                 </a>
@@ -390,239 +423,155 @@ export default function Home() {
             </section>
 
 
-
-            {/* About Section with Bento Grid */}
-            <section id="about" className="py-20 sm:py-28 md:py-40 px-5 sm:px-8 md:px-16 bg-white/50 relative z-10">
-                <div className="max-w-[90rem] mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="mb-16 sm:mb-20"
-                    >
-                        <span className="flex items-center gap-3 text-xs sm:text-sm tracking-[0.25em] sm:tracking-[0.3em] text-[#1a1a1a] uppercase font-bold">
-                            <span className="w-8 h-[1px] bg-[#1a1a1a]"></span>
-                            Features & <PointerHighlight><span className="p-1">Technologies</span></PointerHighlight>
-                        </span>
+            {/* ── START A PROJECT ── */}
+            <section className="py-28 sm:py-36 px-6" style={{ backgroundColor: C.bgAlt }}>
+                <div className="max-w-6xl mx-auto">
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0} className="mb-10">
+                        <SectionLabel>Start a Project</SectionLabel>
                     </motion.div>
-                    <div>
-                        <h1 className="text-4xl md:text-4xl lg:text-6xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 py-6 bg-clip-text bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-700 dark:from-neutral-800 dark:via-white dark:to-white">
-                            Build amazing websites <br /> at <Cover>warp speed</Cover>
-                        </h1>
-                    </div>
-                    <FeaturesSectionDemo />
-
-                    <div className="mt-12">
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="lg:col-span-3"
-                        >
-                            <BentoGridThirdDemo />
-                        </motion.div>
-                    </div>
+                    <PricingFlow />
                 </div>
             </section>
 
 
-            {/* Contact Section */}
-            <section id="contact" className="py-20 sm:py-28 md:py-10 px-5 sm:px-8 md:px-16 relative z-10 bg-white/50">
-                <div className="max-w-[90rem] mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="flex flex-col items-center text-center space-y-12"
-                    >
-                        <span className="text-xs sm:text-sm tracking-[0.25em] sm:tracking-[0.3em] text-[#6a6a6a] uppercase font-bold">
-                            Get In Touch
-                        </span>
+            {/* ── CONTACT ── */}
+            <section id="contact" className="py-28 sm:py-36 px-6">
+                <div className="max-w-6xl mx-auto">
+                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}
+                        className="flex flex-col items-center text-center space-y-8">
 
-                        <h2 className="text-[#6a6a6a] text-xl sm:text-2xl md:text-3xl font-normal tracking-tight">
-                            Hey, you scrolled this far, let's talk.
+                        <SectionLabel>Get In Touch</SectionLabel>
+
+                        <h2 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight" style={{ color: C.dark }}>
+                            Ready to grow?<br /> Let's talk.
                         </h2>
 
-                        <div className="flex justify-center">
-                            <NoiseBackground
-                                containerClassName="w-fit rounded-full mx-auto"
-                                gradientColors={[
-                                    "rgb(255, 100, 150)",
-                                    "rgb(100, 150, 255)",
-                                    "rgb(255, 200, 100)",
-                                ]}
-                            >
-                                <button
-                                    data-cal-link="shivam-verma-i3fold/30min"
-                                    className="group relative flex items-center bg-white/90 hover:bg-white rounded-full pl-2 pr-6 py-2 transition-all duration-300 shadow-[0px_2px_0px_0px_rgba(255,255,255,0.1)_inset,0px_0.5px_1px_0px_rgba(0,0,0,0.1)] hover:shadow-lg cursor-pointer active:scale-98"
-                                >
-                                    <div className="flex -space-x-3 mr-4">
-                                        <img
-                                            src="https://pbs.twimg.com/profile_images/2022349950219407360/69s2wv6L_400x400.jpg"
-                                            alt="Me"
-                                            className="w-10 h-10 rounded-full border-2 border-white"
-                                        />
+                        <p className="text-[15px] max-w-md leading-[1.75]" style={{ color: C.body }}>
+                            Book a free 30-minute call. Tell us what you need, and we will figure out the best way to make it happen.
+                        </p>
 
-                                        <div className="w-10 h-10 rounded-full border-2 border-white bg-gray-300 flex items-center justify-center text-[10px] font-medium text-gray-600">
-                                            You
-                                        </div>
-                                    </div>
+                        {/* Growth illustration */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.2 }}>
+                            <Image src="/svgs/undraw_growth-chart_4iho.svg" alt="Growth" width={180} height={120} className="opacity-50 select-none" />
+                        </motion.div>
 
-                                    <span className="text-[#1a1a1a] font-medium text-lg tracking-wide">
-                                        Book a Free Call
-                                    </span>
+                        <button
+                            data-cal-link="shivam-verma-i3fold/30min"
+                            className="group flex items-center gap-3 text-white rounded-full pl-7 pr-4 py-3.5 text-[14px] font-semibold transition-opacity duration-200 hover:opacity-90 cursor-pointer"
+                            style={{ backgroundColor: C.accent }}>
+                            <span>Book a Free Call</span>
+                            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                                <ArrowUpRight className="w-4 h-4" />
+                            </div>
+                        </button>
 
-                                    <div className="ml-3 w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                                        <ArrowUpRight className="w-4 h-4 text-[#1a1a1a]" />
-                                    </div>
-                                </button>
-                            </NoiseBackground>
-                        </div>
-
-
-                        <div className="pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 w-full max-w-4xl mx-auto border-t border-gray-200 mt-16">
+                        <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-14 w-full max-w-2xl mx-auto mt-12"
+                            style={{ borderTop: `1px solid ${C.border}` }}>
                             {[
                                 { icon: Mail, label: 'Email', href: 'mailto:theadroitdev@gmail.com' },
                                 { icon: Github, label: 'GitHub', href: 'https://github.com/theadroitdev' },
                                 { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/shivam-verma-079780312/6' },
                                 { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/theadroitdev' }
-                            ].map((social, i) => (
-                                <a
-                                    key={i}
-                                    href={social.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex flex-col items-center gap-3 text-[#6a6a6a] hover:text-[#1a1a1a] transition-colors group"
-                                >
-                                    <social.icon className="w-6 h-6 group-hover:scale-110 transition-transform" />
-                                    <span className="text-sm tracking-widest uppercase">{social.label}</span>
+                            ].map((s, i) => (
+                                <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
+                                    className="flex flex-col items-center gap-2.5 pt-6 transition-colors duration-200 group"
+                                    style={{ color: C.muted }}
+                                    onMouseEnter={e => e.currentTarget.style.color = C.dark}
+                                    onMouseLeave={e => e.currentTarget.style.color = C.muted}>
+                                    <s.icon className="w-[18px] h-[18px] group-hover:scale-110 transition-transform" />
+                                    <span className="text-[11px] tracking-[0.15em] uppercase font-semibold">{s.label}</span>
                                 </a>
                             ))}
                         </div>
                     </motion.div>
                 </div>
             </section>
-            <div className="h-[15rem] flex items-center justify-center">
-                <TextHoverEffect text="THEADROITDEV" />
-            </div>
-            {/* Footer */}
-            <footer className="border-t border-[#1a1a1a]/10 py-8 sm:py-10 md:py-12 px-5 sm:px-8 md:px-16 bg-white/50 relative z-10">
-                <div className="max-w-[90rem] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-5 md:gap-6">
-                    <p className="text-[#6a6a6a] tracking-[0.15em] sm:tracking-widest text-center md:text-left font-normal text-sm">
-                        © {new Date().getFullYear()} THEADROITDEV
-                    </p>
 
-                    <p className="text-[#8a8a8a] tracking-wide text-center md:text-right font-normal text-sm">
-                        Designed & Built by Shivam Verma
+
+            {/* ── FOOTER ── */}
+            <footer className="py-6 px-6" style={{ borderTop: `1px solid ${C.border}` }}>
+                <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+                    <p className="text-[11px] tracking-[0.1em] uppercase font-semibold" style={{ color: C.muted }}>
+                        &copy; {new Date().getFullYear()} TheAdroitDev
+                    </p>
+                    <p className="text-[11px] tracking-wide" style={{ color: C.accentLight }}>
+                        Websites &middot; Ads &middot; Growth
                     </p>
                 </div>
-
             </footer>
         </div>
     )
 }
 
+
+// ── PRICING FLOW ──────────────────────────────────────
+
 function PricingFlow() {
     const [step, setStep] = useState(0)
     const [selectedPlan, setSelectedPlan] = useState(null)
 
-    const handleSelect = (plan) => {
-        setSelectedPlan(plan)
-        setStep(1)
-    }
-
     return (
-        <div className="w-full bg-white rounded-3xl p-6 sm:p-10 shadow-[inset_0_1px_2px_#0000001a,inset_0_2px_4px_#0000000d] border border-gray-100 overflow-hidden min-h-[400px] flex flex-col justify-center">
+        <div className="w-full rounded-2xl p-6 sm:p-10 min-h-[380px] flex flex-col justify-center"
+            style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
             <AnimatePresence mode="wait">
-
                 {step === 0 && (
-                    <motion.div
-                        key="step0"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        className="space-y-8"
-                    >
-                        <h3 className="text-2xl sm:text-4xl font-normal text-[#1a1a1a]">What are you building?</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <button
-                                onClick={() => handleSelect('frontend')}
-                                className="group text-left p-8 rounded-2xl bg-gray-50 transition-all duration-300 border border-transparent shadow-[inset_0_1px_2px_#0000001a,inset_0_2px_4px_#0000000d]"
-                            >
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="p-3 bg-white text-black rounded-lg shadow-sm group-hover:scale-110 transition-transform">
-                                        <Palette className="w-6 h-6" />
+                    <motion.div key="s0" initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -15 }}
+                        className="space-y-7">
+                        <h3 className="text-xl sm:text-3xl font-bold" style={{ color: C.dark }}>What do you need?</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {[
+                                { key: 'frontend', icon: <Palette className="w-5 h-5" />, title: 'A New Website', desc: 'We will design and build a modern website for your brand or business.' },
+                                { key: 'ecommerce', icon: <ShoppingBag className="w-5 h-5" />, title: 'Online Store or Web App', desc: 'Full setup with payments, user accounts, admin panel, and delivery tracking.' },
+                            ].map(opt => (
+                                <button key={opt.key}
+                                    onClick={() => { setSelectedPlan(opt.key); setStep(1); }}
+                                    className="group text-left p-6 rounded-xl transition-all duration-200 hover:shadow-sm"
+                                    style={{ backgroundColor: C.bgAlt, border: `1px solid ${C.border}` }}>
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="p-2.5 rounded-lg group-hover:scale-105 transition-transform"
+                                            style={{ backgroundColor: `${C.accent}12`, color: C.accent }}>
+                                            {opt.icon}
+                                        </div>
+                                        <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: C.accentLight }} />
                                     </div>
-                                    <ArrowUpRight className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </div>
-                                <h4 className="text-xl font-medium mb-2">Frontend Dev</h4>
-                                <p className="text-sm opacity-60">Pixel-perfect React/Next.js implementation from your designs.</p>
-                            </button>
-
-                            <button
-                                onClick={() => handleSelect('ecommerce')}
-                                className="group text-left p-8 rounded-2xl bg-gray-50 transition-all duration-300 border border-transparent shadow-[inset_0_1px_2px_#0000001a,inset_0_2px_4px_#0000000d]"
-                            >
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="p-3 bg-white text-black rounded-lg shadow-sm group-hover:scale-110 transition-transform">
-                                        <ShoppingBag className="w-6 h-6" />
-                                    </div>
-                                    <ArrowUpRight className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </div>
-                                <h4 className="text-xl font-medium mb-2">E-Commerce / Business</h4>
-                                <p className="text-sm opacity-60">Full-stack solutions with Payments, Admin, and Logistics.</p>
-                            </button>
-
+                                    <h4 className="text-[15px] font-bold mb-1" style={{ color: C.dark }}>{opt.title}</h4>
+                                    <p className="text-[13px] leading-snug" style={{ color: C.body }}>{opt.desc}</p>
+                                </button>
+                            ))}
                         </div>
                     </motion.div>
                 )}
 
                 {step === 1 && (
-                    <motion.div
-                        key="step1"
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        className="flex flex-col items-center text-center space-y-8"
-                    >
-                        <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
-                            <Check className="w-8 h-8" />
+                    <motion.div key="s1" initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -15 }}
+                        className="flex flex-col items-center text-center space-y-6">
+                        <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
+                            <Check className="w-7 h-7" />
                         </div>
                         <div>
-                            <h3 className="text-2xl sm:text-3xl font-medium text-[#1a1a1a] mb-2">
-                                Great choice!
-                            </h3>
-                            <p className="text-gray-500 max-w-md mx-auto font-sans text-base">
-                                You selected <span className="text-black capitalize">{selectedPlan === 'ecommerce' ? 'E-Commerce' : 'Frontend Development'}</span>.
-                                Let's discuss your specific requirements on a quick call.
+                            <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: C.dark }}>Great choice!</h3>
+                            <p className="text-[14px] max-w-sm mx-auto leading-[1.75]" style={{ color: C.body }}>
+                                You selected <span className="font-semibold" style={{ color: C.dark }}>{selectedPlan === 'ecommerce' ? 'Online Store / Web App' : 'A New Website'}</span>.
+                                Let's get on a quick call to understand your requirements.
                             </p>
                         </div>
-
-                        <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-                            <button
-                                onClick={() => setStep(0)}
-                                className="px-8 py-4 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors cursor-pointer"
-                            >
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <button onClick={() => setStep(0)}
+                                className="px-6 py-3 rounded-full text-[13px] font-semibold transition-colors cursor-pointer"
+                                style={{ border: `1px solid ${C.border}`, color: C.muted }}>
                                 Go Back
                             </button>
-
-                            <button
-                                data-cal-link="shivam-verma-i3fold/30min"
-                                className="px-8 py-4 rounded-full bg-[#1a1a1a] text-white transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl cursor-pointer hover:shadow-[inset_0_0_0_2px_#ffffff50]"
-                            >
-                                <span>Schedule Consultation</span>
-                                <ChevronRight className="w-4 h-4" />
+                            <button data-cal-link="shivam-verma-i3fold/30min"
+                                className="px-6 py-3 rounded-full text-white text-[13px] font-semibold transition-opacity hover:opacity-90 flex items-center gap-2 cursor-pointer"
+                                style={{ backgroundColor: C.accent }}>
+                                Schedule a Call <ChevronRight className="w-3.5 h-3.5" />
                             </button>
                         </div>
-
                     </motion.div>
                 )}
             </AnimatePresence>
-
         </div>
     )
-
 }
