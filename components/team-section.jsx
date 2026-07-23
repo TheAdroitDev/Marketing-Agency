@@ -96,7 +96,7 @@ export function TeamPage() {
               {/* Header with avatar */}
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-blue-400 to-blue-600">
+                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-linear-to-br from-blue-400 to-blue-600">
                     <img
                       src={member.image}
                       alt={member.name}
