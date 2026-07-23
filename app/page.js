@@ -1,6 +1,6 @@
 'use client'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
     ArrowUpRight, Mail, Github, Linkedin, Twitter,
     ChevronRight, Check, ShoppingBag, Palette,
@@ -12,7 +12,9 @@ import Image from 'next/image'
 import { AuroraText } from "@/components/ui/aurora-text"
 import AuroraBackgroundDemo from "@/components/aurora-background-demo"
 import MagneticButtonDemo from '@/components/magnetic-button-demo';
-import { audio } from 'framer-motion/m';
+import { WobbleCard } from "@/components/ui/wobble-card";
+import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
+import { TeamPage } from '@/components/team-section';
 // --- CAL.COM INTEGRATION ---
 const useCalEmbed = () => {
     useEffect(() => {
@@ -91,12 +93,12 @@ const services = [
 ]
 
 const websiteTypes = [
-    { icon: <ShoppingBag className="w-5 h-5" />, name: 'Online Stores', desc: 'Sell products online with payments, inventory, and delivery tracking.' },
-    { icon: <Monitor className="w-5 h-5" />, name: 'SaaS Platforms', desc: 'Web apps with login, subscription billing, and user dashboards.' },
-    { icon: <Briefcase className="w-5 h-5" />, name: 'Business Websites', desc: 'Professional websites that make your company look credible and trustworthy.' },
-    { icon: <Palette className="w-5 h-5" />, name: 'Portfolio Sites', desc: 'Beautiful websites to showcase your work, photography, or design projects.' },
-    { icon: <Rocket className="w-5 h-5" />, name: 'Landing Pages', desc: 'Single-page websites designed to get people to sign up or buy.' },
-    { icon: <LayoutDashboard className="w-5 h-5" />, name: 'Admin Panels', desc: 'Custom dashboards to manage your orders, users, and business data.' },
+    { icon: <ShoppingBag className="w-5 h-5" />, name: 'Online Stores', desc: 'Sell products online with payments, inventory, and delivery tracking.', illustration: '/svgs/undraw_system-update_pc33.svg' },
+    { icon: <Monitor className="w-5 h-5" />, name: 'SaaS Platforms', desc: 'Web apps with login, subscription billing, and user dashboards.', illustration: '/svgs/undraw_online-ad_703t.svg' },
+    { icon: <Briefcase className="w-5 h-5" />, name: 'Business Websites', desc: 'Professional websites that make your company look credible and trustworthy.', illustration: '/svgs/undraw_collaboration_hkrb.svg' },
+    { icon: <Palette className="w-5 h-5" />, name: 'Portfolio Sites', desc: 'Beautiful websites to showcase your work, photography, or design projects.', illustration: '/svgs/undraw_marketing-analysis_2u5r.svg' },
+    { icon: <Rocket className="w-5 h-5" />, name: 'Landing Pages', desc: 'Single-page websites designed to get people to sign up or buy.', illustration: '/svgs/undraw_make-it-rain_ylfg.svg' },
+    { icon: <LayoutDashboard className="w-5 h-5" />, name: 'Admin Panels', desc: 'Custom dashboards to manage your orders, users, and business data.', illustration: '/svgs/undraw_growth-chart_4iho.svg' },
 ]
 
 const adPlatforms = [
@@ -171,6 +173,7 @@ function SectionLabel({ children }) {
 export default function Home() {
     const [hoveredProject, setHoveredProject] = useState(null)
 
+
     useCalEmbed()
 
     const fadeIn = {
@@ -194,10 +197,10 @@ export default function Home() {
             >
                 <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
                     <span className="text-[13px] tracking-[0.18em] font-bold uppercase" style={{ color: C.dark }}>
-                        <Image alt="logo" src={"/logo-v3.png"} width={100} height={100}/>
+                        Ak Prints
                     </span>
                     <div className="hidden md:flex items-center gap-8">
-                        {['Services', 'Team', 'Projects', 'Contact'].map(l => (
+                        {['Marketing','Website Development', 'Team', 'Projects', 'Contact'].map(l => (
                             <a key={l} href={`#${l.toLowerCase()}`}
                                 className="text-[14px] tracking-[0.12em] font-medium transition-colors duration-200 hover:opacity-100"
                                 style={{ color: C.muted }}
@@ -208,74 +211,156 @@ export default function Home() {
                         ))}
                     </div>
                     <a href="#contact"
-                     >
-                        <MagneticButtonDemo/>
+                    >
+                        <MagneticButtonDemo />
                     </a>
                 </div>
             </motion.nav>
 
-                    <AuroraBackgroundDemo/>
-      
+            <AuroraBackgroundDemo />
+
 
 
             {/* ── SERVICES ── */}
             <section id="services" className="py-28 sm:py-36 px-6">
                 <div className="max-w-6xl mx-auto">
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
-                        {/* <SectionLabel>What We Do</SectionLabel> */}
                         <h2 className="text-2xl sm:text-[2.5rem] text-center font-bold tracking-tight leading-snug mt-1 mb-14" style={{ color: C.dark }}>
-                        Everything your business needs<br className="hidden sm:block" />  <AuroraText>   to grow online.</AuroraText>
+                            Everything your business needs<br className="hidden sm:block" />  <AuroraText>to grow online.</AuroraText>
                         </h2>
                     </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {services.map((s, i) => (
-                            <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                                variants={fadeIn} custom={i * 0.1}
-                                className="group rounded-2xl p-7 sm:p-8 transition-all duration-300 shadow-md"
-                                style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
-
-                                <div className="flex items-center justify-between mb-5">
-                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center"
-                                        style={{ backgroundColor: `${C.accent}12`, color: C.accent }}>
-                                        {s.icon}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 max-w-7xl mx-auto w-full">
+                        {/* 1. Website Development (Span 2) */}
+                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}
+                            variants={fadeIn} custom={0.1} className="col-span-1 lg:col-span-2">
+                            <WobbleCard
+                                containerClassName="bg-pink-700 relative overflow-hidden min-h-[300px] h-full shadow-md"
+                                className="py-10 px-8 sm:px-10 h-full flex flex-col justify-between"
+                            >
+                                <div className="max-w-[65%] space-y-4">
+                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 text-white">
+                                        <Code2 className="w-5 h-5" />
                                     </div>
-                                    <Image src={s.illustration} alt={s.title} width={48} height={48} className="opacity-50 group-hover:opacity-80 transition-opacity" />
+                                    <h3 className="text-[20px] font-bold text-white">
+                                        Website Development
+                                    </h3>
+                                    <p className="text-[14px] leading-[1.75] text-neutral-200">
+                                        We build all types of websites. Online stores, business websites, personal portfolios, landing pages, or custom dashboards. You name it, we build it.
+                                    </p>
                                 </div>
-                                <h3 className="text-[17px] font-bold mb-3" style={{ color: C.dark }}>{s.title}</h3>
-                                <p className="text-[14px] leading-[1.75]" style={{ color: C.body }}>{s.description}</p>
-                            </motion.div>
-                        ))}
+                                <div className="absolute -right-8 -bottom-10 w-[200px] sm:w-[240px] md:w-[260px] h-[200px] sm:h-[240px] opacity-80 pointer-events-none select-none">
+                                    <Image
+                                        src="/svgs/undraw_system-update_pc33.svg"
+                                        alt="Website Development"
+                                        fill
+                                        className="object-contain brightness-110"
+                                    />
+                                </div>
+                            </WobbleCard>
+                        </motion.div>
+
+                        {/* 2. Ad Campaigns (Span 1) */}
+                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}
+                            variants={fadeIn} custom={0.2} className="col-span-1">
+                            <WobbleCard
+                                containerClassName="bg-indigo-700 relative overflow-hidden min-h-[300px] h-full shadow-md"
+                                className="py-10 px-8 sm:px-10 h-full flex flex-col justify-between"
+                            >
+                                <div className="space-y-4">
+                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 text-white">
+                                        <Rocket className="w-5 h-5" />
+                                    </div>
+                                    <h3 className="text-[20px] font-bold text-white">
+                                        Ad Campaigns
+                                    </h3>
+                                    <p className="text-[14px] leading-[1.75] text-neutral-200">
+                                        We run your ads on YouTube, Instagram, and Google. We handle targeting, creatives, and budget.
+                                    </p>
+                                </div>
+                                <div className="absolute -right-6 -bottom-10 w-[160px] h-[160px] opacity-75 pointer-events-none select-none">
+                                    <Image
+                                        src="/svgs/undraw_online-ad_703t.svg"
+                                        alt="Ad Campaigns"
+                                        fill
+                                        className="object-contain brightness-110"
+                                    />
+                                </div>
+                            </WobbleCard>
+                        </motion.div>
+
+                        {/* 3. Digital Marketing (Span 3) */}
+                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}
+                            variants={fadeIn} custom={0.3} className="col-span-1 lg:col-span-3">
+                            <WobbleCard
+                                containerClassName="bg-blue-800 relative overflow-hidden min-h-[260px] h-full shadow-md"
+                                className="py-10 px-8 sm:px-10 h-full flex flex-col justify-between"
+                            >
+                                <div className="max-w-[70%] space-y-4">
+                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 text-white">
+                                        <Globe className="w-5 h-5" />
+                                    </div>
+                                    <h3 className="text-[20px] font-bold text-white">
+                                        Digital Marketing
+                                    </h3>
+                                    <p className="text-[14px] leading-[1.75] text-neutral-200">
+                                        We help your brand grow online. SEO to rank on Google, content that people actually read, and social media that builds a real, engaged audience.
+                                    </p>
+                                </div>
+                                <div className="absolute -right-8 -bottom-8 w-[200px] sm:w-[240px] md:w-[280px] h-[200px] sm:h-[240px] opacity-80 pointer-events-none select-none">
+                                    <Image
+                                        src="/svgs/undraw_marketing-analysis_2u5r.svg"
+                                        alt="Digital Marketing"
+                                        fill
+                                        className="object-contain brightness-110"
+                                    />
+                                </div>
+                            </WobbleCard>
+                        </motion.div>
                     </div>
                 </div>
             </section>
 
-
             {/* ── WEBSITES WE BUILD ── */}
-            <section className="py-28 sm:py-36 px-6" style={{ backgroundColor: C.bgAlt }}>
-                <div className="max-w-6xl mx-auto">
+            <section className="relative py-28 sm:py-36 px-6 overflow-hidden" style={{ backgroundColor: C.bgAlt }}>
+                <BackgroundRippleEffect />
+                <div className="relative z-10 max-w-6xl mx-auto">
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
-                        <SectionLabel>Websites We Build</SectionLabel>
-                        <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1 mb-14" style={{ color: C.dark }}>
+                        <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1 mb-16 text-center" style={{ color: C.dark }}>
                             Tell us what you need.<br className="hidden sm:block" /> We will build it.
                         </h2>
                     </motion.div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {/* Fancy Grid Card Container */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mt-12">
                         {websiteTypes.map((t, i) => (
-                            <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                                variants={fadeIn} custom={i * 0.07}
-                                className="group flex items-center gap-4 rounded-xl px-5 py-5 transition-all duration-300 hover:shadow-sm"
-                                style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
-                                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-300"
-                                    style={{ backgroundColor: `${C.accent}0a`, color: C.muted }}
-                                    onMouseEnter={e => { e.currentTarget.style.color = C.accent }}
-                                    onMouseLeave={e => { e.currentTarget.style.color = C.muted }}>
-                                    {t.icon}
+                            <motion.div
+                                key={i}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                variants={fadeIn}
+                                custom={i * 0.08}
+                                className="group relative bg-white dark:bg-zinc-900 border border-neutral-200/60 dark:border-zinc-800/85 rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 hover:border-indigo-500/30 transition-all duration-300 min-h-[420px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]"
+                            >
+                                <div className="space-y-4">
+                                    <h3 className="text-xl font-extrabold text-neutral-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
+                                        {t.name}
+                                    </h3>
+                                    <p className="text-[15px] leading-relaxed text-neutral-600 dark:text-zinc-400">
+                                        {t.desc}
+                                    </p>
                                 </div>
-                                <div>
-                                    <h4 className="text-[14px] font-bold" style={{ color: C.dark }}>{t.name}</h4>
-                                    <p className="text-[13px] leading-snug mt-0.5" style={{ color: C.muted }}>{t.desc}</p>
+
+                                {/* Hover-zoom SVG illustration at the bottom */}
+                                <div className="pt-6 flex justify-center overflow-hidden h-[160px] items-end relative rounded-xl bg-gradient-to-t from-neutral-50/50 to-transparent dark:from-zinc-950/20">
+                                    <Image
+                                        src={t.illustration}
+                                        alt={t.name}
+                                        width={200}
+                                        height={150}
+                                        className="select-none object-contain h-full w-auto transition-transform duration-500 group-hover:scale-105"
+                                    />
                                 </div>
                             </motion.div>
                         ))}
@@ -307,10 +392,10 @@ export default function Home() {
                                         {p.icon}
                                     </div>
                                 </div>
-                                <h3 className="text-lg font-bold mb-2" style={{ color: C.dark }}>{p.name}</h3>
-                                <p className="text-[14px] leading-[1.75] mb-5" style={{ color: C.body }}>{p.description}</p>
+                                <h3 className="text-xl font-bold mb-2" style={{ color: C.dark }}>{p.name}</h3>
+                                <p className="text-[14px] leading-[1.75] mb-5" style={{ color: C.dark }}>{p.description}</p>
 
-                                <div className="flex justify-end opacity-40 group-hover:opacity-60 transition-opacity duration-500">
+                                <div className="flex justify-end opacity-100 transition-opacity duration-500">
                                     <Image src={p.illustration} alt={p.name} width={120} height={80} className="select-none" />
                                 </div>
                             </motion.div>
@@ -321,7 +406,7 @@ export default function Home() {
 
 
             {/* ── TEAM ── */}
-            <section id="team" className="py-28 sm:py-36 px-6" style={{ backgroundColor: C.bgAlt }}>
+           {/*  <section id="team" className="py-28 sm:py-36 px-6" style={{ backgroundColor: C.bgAlt }}>
                 <div className="max-w-6xl mx-auto">
 
                     <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
@@ -337,7 +422,7 @@ export default function Home() {
                         <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="hidden lg:block flex-shrink-0">
-                            <Image src="/svgs/undraw_collaboration_hkrb.svg" alt="Team" width={220} height={160} className="opacity-60 select-none" />
+                            <Image src="/svgs/undraw_collaboration_hkrb.svg" alt="Team" width={220} height={160} className="opacity-100 select-none" />
                         </motion.div>
                     </div>
 
@@ -357,8 +442,8 @@ export default function Home() {
                         ))}
                     </div>
                 </div>
-            </section>
-
+            </section> */}
+            <TeamPage/>
 
             {/* ── PROJECTS ── */}
             <section id="projects" className="py-28 sm:py-36 px-6">
