@@ -188,3 +188,31 @@ html {
 .float-icon {
   animation: float 3s ease-in-out infinite;
 }
+
+.animate-cell-ripple {
+  animation: cell-ripple var(--duration) ease-in-out var(--delay) 1 none;
+}
+
+@keyframes cell-ripple {
+  0% {
+    background-color: transparent;
+  }
+  30% {
+    background-color: rgba(92, 82, 255, 0.25);
+  }
+  60% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sticky-card-deck {
+    position: sticky;
+    top: var(--stack-top);
+    z-index: var(--stack-z);
+  }
+}
+
