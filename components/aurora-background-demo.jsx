@@ -75,8 +75,8 @@ const C = {
                     >
                         <div className="flex flex-col items-start gap-6 max-w-md">
                             <p className="text-[15px] sm:text-base leading-[1.75]" style={{ color: C.body }}>
-                                We build websites, run ad campaigns on YouTube, Instagram & Google,
-                                and help your brand grow online. Simple as that.
+                                We build websites and digitally market across Google, Youtube & Meta
+                                and help your brand grow online. 
                             </p>
                             <a href="#contact">
                                 <MagneticButtonDemo text="Book Call" />
