@@ -61,7 +61,7 @@ const C = {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.7, delay: 0.7 }}
-                            className="hidden lg:block flex-shrink-0"
+                            className="hidden lg:block shrink-0"
                         >
                             <Image src="/svgs/undraw_collaboration_hkrb.svg" alt="Team collaboration" width={340} height={260} className="select-none" priority />
                         </motion.div>
