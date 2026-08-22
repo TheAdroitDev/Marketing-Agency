@@ -38,16 +38,17 @@ const C = {
                     {/* Punchline */}
                     <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10 lg:gap-16">
                         <div className="space-y-1 flex-1">
-                            {['Your Ideas.', 'Our Craft.', <CoverDemo/>].map((line, i) => (
+                            {['Your Ideas.', 'Our Craft.', <CoverDemo key="cover"/>].map((line, i) => (
                                 <div key={i} className="overflow-hidden">
                                     <motion.h1
                                         initial={{ y: 100, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         transition={{ duration: 0.8, delay: 0.25 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                                        className="font-bold leading-[0.95] tracking-tight"
+                                        className={`font-bold leading-[0.95] tracking-tight ${
+                                            i === 2 ? "text-indigo-600 dark:text-indigo-400" : "text-zinc-900 dark:text-zinc-100"
+                                        }`}
                                         style={{
                                             fontSize: 'clamp(2.5rem, 8vw, 6.5rem)',
-                                            color: i === 2 ? C.accent : C.dark
                                         }}
                                     >
                                         {line}
@@ -74,7 +75,7 @@ const C = {
                         className="mt-12 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6"
                     >
                         <div className="flex flex-col items-start gap-6 max-w-md">
-                            <p className="text-[15px] sm:text-base leading-[1.75]" style={{ color: C.body }}>
+                            <p className="text-[15px] sm:text-base leading-[1.75] text-zinc-600 dark:text-zinc-300">
                                 We build websites and digitally market across Google, Youtube & Meta
                                 and help your brand grow online. 
                             </p>
@@ -82,7 +83,7 @@ const C = {
                                 <MagneticButtonDemo text="Book Call" />
                             </a>
                         </div>
-                        <div className="flex items-center gap-2.5 text-[11px] tracking-[0.2em] uppercase font-semibold" style={{ color: C.accentLight }}>
+                        <div className="flex items-center gap-2.5 text-[11px] tracking-[0.2em] uppercase font-semibold text-emerald-600 dark:text-emerald-400">
                             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                             Available for projects
                         </div>
