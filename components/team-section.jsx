@@ -68,19 +68,19 @@ const teamMembers = [
 
 export function TeamPage() {
   return (
-    <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-zinc-950 transition-colors duration-300">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-12 space-y-4">
-          <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+          <p className="text-sm font-medium text-gray-500 dark:text-zinc-400 uppercase tracking-wide">
             Team
           </p>
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-zinc-100 leading-tight">
             Practical operators
             <br />
             with product depth.
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl">
+          <p className="text-lg text-gray-600 dark:text-zinc-400 max-w-3xl">
             A focused group combining research, design, engineering, and quality
             to ship clear, customer-facing outcomes.
           </p>
@@ -91,7 +91,7 @@ export function TeamPage() {
           {teamMembers.map((member) => (
             <div
               key={member.id}
-              className="flex flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col gap-4 rounded-lg border border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 shadow-sm hover:shadow-md transition-all duration-300"
             >
               {/* Header with avatar */}
               <div className="flex items-start justify-between">
@@ -105,32 +105,32 @@ export function TeamPage() {
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900">{member.name}</h3>
-                    <p className="text-sm text-gray-600">{member.title}</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-zinc-100">{member.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-zinc-400">{member.title}</p>
                   </div>
                 </div>
               </div>
 
               {/* Description */}
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-gray-600 dark:text-zinc-300 leading-relaxed">
                 {member.description}
               </p>
 
               {/* Location and actions */}
-              <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                <p className="text-xs font-medium text-gray-500">{member.location}</p>
+              <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-zinc-800">
+                <p className="text-xs font-medium text-gray-500 dark:text-zinc-400">{member.location}</p>
                 <div className="flex items-center gap-2">
                   <button
-                    className="p-1.5 hover:bg-gray-100 rounded transition-colors"
+                    className="p-1.5 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded transition-colors"
                     title="External Link"
                   >
-                    <ExternalLink className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+                    <ExternalLink className="w-4 h-4 text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300" />
                   </button>
                   <button
-                    className="p-1.5 hover:bg-gray-100 rounded transition-colors"
+                    className="p-1.5 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded transition-colors"
                     title="Share"
                   >
-                    <Share2 className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+                    <Share2 className="w-4 h-4 text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300" />
                   </button>
                 </div>
               </div>
@@ -140,7 +140,7 @@ export function TeamPage() {
                 {member.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium"
+                    className="inline-block px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-medium border border-transparent dark:border-blue-800/40"
                   >
                     {skill}
                   </span>
