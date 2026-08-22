@@ -6,7 +6,7 @@ import {
     ChevronRight, Check, ShoppingBag, Palette,
     Globe, Monitor, LayoutDashboard, Briefcase, Rocket, Code2,
     Youtube, Instagram, Search,
-    PenTool, Figma, Server, Cpu
+    PenTool, Figma, Server, Cpu, Sun, Moon
 } from 'lucide-react'
 import Image from 'next/image'
 import { AuroraText } from "@/components/ui/aurora-text"
@@ -15,6 +15,7 @@ import MagneticButtonDemo from '@/components/magnetic-button-demo';
 import { WobbleCard } from "@/components/ui/wobble-card";
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
 import { TeamPage } from '@/components/team-section';
+
 // --- CAL.COM INTEGRATION ---
 const useCalEmbed = () => {
     useEffect(() => {
@@ -56,7 +57,7 @@ const getCalApi = () =>
 
 
 // ── COLORS ────────────────────────────────────────────
-const C = {
+const lightColors = {
     dark: '#1a1a1a',
     body: '#3d3d3d',
     muted: '#6b6b6b',
@@ -66,6 +67,18 @@ const C = {
     bgAlt: '#f3f2ef',
     card: '#ffffff',
     border: '#e5e4e0',
+}
+
+const darkColors = {
+    dark: '#f4f4f5',
+    body: '#a1a1aa',
+    muted: '#71717a',
+    accent: '#818cf8',
+    accentLight: '#a5b4fc',
+    bg: '#09090b',
+    bgAlt: '#18181b',
+    card: '#121215',
+    border: '#27272a',
 }
 
 
@@ -157,11 +170,11 @@ const projects = [
 
 // ── SECTION LABEL ─────────────────────────────────────
 
-function SectionLabel({ children }) {
+function SectionLabel({ children, C }) {
     return (
         <span className="inline-flex items-center gap-3 text-[11px] tracking-[0.25em] uppercase font-semibold mb-5"
-            style={{ color: C.accentLight }}>
-            <span className="w-6 h-[2px] rounded-full" style={{ backgroundColor: C.accentLight }} />
+            style={{ color: C?.accentLight || '#818cf8' }}>
+            <span className="w-6 h-[2px] rounded-full" style={{ backgroundColor: C?.accentLight || '#818cf8' }} />
             {children}
         </span>
     )
@@ -172,7 +185,17 @@ function SectionLabel({ children }) {
 
 export default function Home() {
     const [hoveredProject, setHoveredProject] = useState(null)
+    const [isDarkMode, setIsDarkMode] = useState(true)
 
+    useEffect(() => {
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    }, [isDarkMode])
+
+    const C = isDarkMode ? darkColors : lightColors
 
     useCalEmbed()
 
@@ -185,22 +208,22 @@ export default function Home() {
     }
 
     return (
-        <div className="min-h-screen antialiased overflow-x-hidden" style={{ backgroundColor: C.bg, color: C.dark }}>
+        <div className="min-h-screen antialiased overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: C.bg, color: C.dark }}>
 
             {/* ── NAV ── */}
             <motion.nav
                 initial={{ y: -80 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-                className="fixed top-0 w-full z-50 backdrop-blur-xl"
-                style={{ backgroundColor: `${C.bg}e6`, borderBottom: `1px solid ${C.border}` }}
+                className="fixed top-0 w-full z-50 backdrop-blur-xl transition-colors duration-300"
+                style={{ backgroundColor: isDarkMode ? 'rgba(9, 9, 11, 0.85)' : 'rgba(250, 250, 249, 0.85)', borderBottom: `1px solid ${C.border}` }}
             >
                 <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-                    <span className="text-[13px] tracking-[0.18em] font-bold uppercase" style={{ color: C.dark }}>
-                        Ak Prints
+                    <span className="text-[13px] tracking-[0.18em] font-bold uppercase flex items-center gap-2" style={{ color: C.dark }}>
+                        <Image alt="logo" src={"/logo-v3.png"} width={100} height={100} className="dark:brightness-120 dark:invert-0" />
                     </span>
                     <div className="hidden md:flex items-center gap-8">
-                        {['Marketing','Website Development', 'Team', 'Projects', 'Contact'].map(l => (
+                        {['Services', 'Team', 'Projects', 'Contact'].map(l => (
                             <a key={l} href={`#${l.toLowerCase()}`}
                                 className="text-[14px] tracking-[0.12em] font-medium transition-colors duration-200 hover:opacity-100"
                                 style={{ color: C.muted }}
@@ -210,10 +233,30 @@ export default function Home() {
                             </a>
                         ))}
                     </div>
-                    <a href="#contact"
-                    >
-                        <MagneticButtonDemo />
-                    </a>
+                    <div className="flex items-center gap-3">
+                        {/* Dark Mode Toggle */}
+                        <button
+                            onClick={() => setIsDarkMode(!isDarkMode)}
+                            className="p-2.5 rounded-full border transition-all duration-300 flex items-center justify-center hover:scale-105 cursor-pointer shadow-sm"
+                            style={{
+                                backgroundColor: isDarkMode ? '#18181b' : '#f3f2ef',
+                                borderColor: C.border,
+                                color: C.dark
+                            }}
+                            title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                            aria-label="Toggle Dark Mode"
+                        >
+                            {isDarkMode ? (
+                                <Sun className="w-4 h-4 text-amber-400" />
+                            ) : (
+                                <Moon className="w-4 h-4 text-zinc-700" />
+                            )}
+                        </button>
+
+                        <a href="#contact">
+                            <MagneticButtonDemo />
+                        </a>
+                    </div>
                 </div>
             </motion.nav>
 
@@ -235,7 +278,7 @@ export default function Home() {
                         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}
                             variants={fadeIn} custom={0.1} className="col-span-1 lg:col-span-2">
                             <WobbleCard
-                                containerClassName="bg-pink-700 relative overflow-hidden min-h-[300px] h-full shadow-md"
+                                containerClassName="bg-orange-600 relative overflow-hidden min-h-[300px] h-full shadow-md"
                                 className="py-10 px-8 sm:px-10 h-full flex flex-col justify-between"
                             >
                                 <div className="max-w-[65%] space-y-4">
@@ -373,7 +416,7 @@ export default function Home() {
             <section className="py-28 sm:py-36 px-6">
                 <div className="max-w-6xl mx-auto">
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
-                        <SectionLabel>We Run Your Ads</SectionLabel>
+                        <SectionLabel C={C}>We Run Your Ads</SectionLabel>
                         <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1 mb-14" style={{ color: C.dark }}>
                             We put your brand in front<br className="hidden sm:block" /> of the right people.
                         </h2>
@@ -406,50 +449,13 @@ export default function Home() {
 
 
             {/* ── TEAM ── */}
-           {/*  <section id="team" className="py-28 sm:py-36 px-6" style={{ backgroundColor: C.bgAlt }}>
-                <div className="max-w-6xl mx-auto">
-
-                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
-                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
-                            <SectionLabel>Our Team</SectionLabel>
-                            <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1 mb-3" style={{ color: C.dark }}>
-                                A team of specialists<br className="hidden sm:block" /> behind every project.
-                            </h2>
-                            <p className="text-[15px] max-w-lg leading-[1.75]" style={{ color: C.body }}>
-                                You don't just get one developer. You get a full team of experts working together to deliver the best possible result.
-                            </p>
-                        </motion.div>
-                        <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="hidden lg:block flex-shrink-0">
-                            <Image src="/svgs/undraw_collaboration_hkrb.svg" alt="Team" width={220} height={160} className="opacity-100 select-none" />
-                        </motion.div>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                        {teamMembers.map((m, i) => (
-                            <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                                variants={fadeIn} custom={i * 0.08}
-                                className="group rounded-xl p-5 text-center transition-all duration-300 hover:shadow-sm"
-                                style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
-                                <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform duration-300"
-                                    style={{ backgroundColor: `${C.accent}12`, color: C.accent }}>
-                                    {m.icon}
-                                </div>
-                                <h4 className="text-[13px] font-bold leading-tight mb-1.5" style={{ color: C.dark }}>{m.role}</h4>
-                                <p className="text-[12px] leading-snug" style={{ color: C.muted }}>{m.description}</p>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section> */}
             <TeamPage/>
 
             {/* ── PROJECTS ── */}
             <section id="projects" className="py-28 sm:py-36 px-6">
                 <div className="max-w-6xl mx-auto">
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0} className="mb-16">
-                        <SectionLabel>Our Work</SectionLabel>
+                        <SectionLabel C={C}>Our Work</SectionLabel>
                         <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1" style={{ color: C.dark }}>
                             Projects we have delivered.
                         </h2>
@@ -489,7 +495,7 @@ export default function Home() {
                                             <div className="flex flex-wrap gap-2 pt-1">
                                                 {project.tech.map((t, i) => (
                                                     <span key={i} className="text-[11px] tracking-wider font-medium px-2.5 py-1 rounded-md"
-                                                        style={{ backgroundColor: `${C.accent}0a`, color: C.muted }}>
+                                                        style={{ backgroundColor: `${C.accent}12`, color: C.muted }}>
                                                         {t}
                                                     </span>
                                                 ))}
@@ -512,9 +518,9 @@ export default function Home() {
             <section className="py-28 sm:py-36 px-6" style={{ backgroundColor: C.bgAlt }}>
                 <div className="max-w-6xl mx-auto">
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0} className="mb-10">
-                        <SectionLabel>Start a Project</SectionLabel>
+                        <SectionLabel C={C}>Start a Project</SectionLabel>
                     </motion.div>
-                    <PricingFlow />
+                    <PricingFlow C={C} />
                 </div>
             </section>
 
@@ -525,7 +531,7 @@ export default function Home() {
                     <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}
                         className="flex flex-col items-center text-center space-y-8">
 
-                        <SectionLabel>Get In Touch</SectionLabel>
+                        <SectionLabel C={C}>Get In Touch</SectionLabel>
 
                         <h2 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight" style={{ color: C.dark }}>
                             Ready to grow?<br /> Let's talk.
@@ -593,7 +599,7 @@ export default function Home() {
 
 // ── PRICING FLOW ──────────────────────────────────────
 
-function PricingFlow() {
+function PricingFlow({ C }) {
     const [step, setStep] = useState(0)
     const [selectedPlan, setSelectedPlan] = useState(null)
 
