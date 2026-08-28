@@ -72,19 +72,19 @@ const C = {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.85 }}
-                        className="mt-12 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6"
+                        className="mt-14 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-8"
                     >
-                        <div className="flex flex-col items-start gap-6 max-w-md">
-                            <p className="text-[15px] sm:text-base leading-[1.75] text-zinc-600 dark:text-zinc-300">
+                        <div className="flex flex-col items-start gap-6 max-w-xl">
+                            <p className="text-lg sm:text-[21px] leading-[1.65] text-zinc-700 font-normal">
                                 We build websites and digitally market across Google, Youtube & Meta
-                                and help your brand grow online. 
+                                and help your brand grow online.
                             </p>
                             <a href="#contact">
-                                <MagneticButtonDemo text="Book Call" />
+                                <MagneticButtonDemo text="Book a Call" />
                             </a>
                         </div>
-                        <div className="flex items-center gap-2.5 text-[11px] tracking-[0.2em] uppercase font-semibold text-emerald-600 dark:text-emerald-400">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <div className="flex items-center gap-2.5 text-xs tracking-[0.18em] uppercase font-bold text-emerald-700 bg-emerald-50/80 px-4 py-2 rounded-full border border-emerald-200">
+                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                             Available for projects
                         </div>
                     </motion.div>

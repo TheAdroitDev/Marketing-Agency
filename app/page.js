@@ -1,27 +1,29 @@
 'use client'
+
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import {
     ArrowUpRight, Mail, Github, Linkedin, Twitter,
     ChevronRight, Check, ShoppingBag, Palette,
     Globe, Monitor, LayoutDashboard, Briefcase, Rocket, Code2,
     Youtube, Instagram, Search,
-    PenTool, Figma, Server, Cpu, Sun, Moon
+    PenTool, Figma, Server, Cpu, Sparkles, TrendingUp, Zap, Target,
+    CheckCircle2, X, Sliders, ArrowRight, UserCheck, Shield, Clock,
+    HelpCircle, Plus
 } from 'lucide-react'
 import Image from 'next/image'
-import { AuroraText } from "@/components/ui/aurora-text"
 import AuroraBackgroundDemo from "@/components/aurora-background-demo"
-import MagneticButtonDemo from '@/components/magnetic-button-demo';
-import { WobbleCard } from "@/components/ui/wobble-card";
-import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect';
-import { TeamPage } from '@/components/team-section';
+import MagneticButtonDemo from '@/components/magnetic-button-demo'
+import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect'
+import SocialProof01 from '@/components/social-proof-01'
+import { AuroraText } from '@/components/ui/aurora-text'
 
-// --- CAL.COM INTEGRATION ---
+// Cal.com Integration
 const useCalEmbed = () => {
     useEffect(() => {
         (async function () {
             const cal = await getCalApi();
-            cal("ui", { "styles": { "branding": { "brandColor": "#000000" } }, "hideEventTypeDetails": false, "layout": "month_view" });
+            cal("ui", { "styles": { "branding": { "brandColor": "#2563eb" } }, "hideEventTypeDetails": false, "layout": "month_view" });
         })();
     }, []);
 };
@@ -56,354 +58,456 @@ const getCalApi = () =>
     });
 
 
-// ── COLORS ────────────────────────────────────────────
-const lightColors = {
-    dark: '#1a1a1a',
-    body: '#3d3d3d',
-    muted: '#6b6b6b',
-    accent: '#55655a',
-    accentLight: '#708775',
-    bg: '#fafaf9',
-    bgAlt: '#f3f2ef',
-    card: '#ffffff',
-    border: '#e5e4e0',
-}
+// ── DATA DEFINITIONS ─────────────────────────────────
 
-const darkColors = {
-    dark: '#f4f4f5',
-    body: '#a1a1aa',
-    muted: '#71717a',
-    accent: '#818cf8',
-    accentLight: '#a5b4fc',
-    bg: '#09090b',
-    bgAlt: '#18181b',
-    card: '#121215',
-    border: '#27272a',
-}
-
-
-// ── DATA ──────────────────────────────────────────────
-
-const services = [
+const websiteTypes = [
     {
-        icon: <Code2 className="w-5 h-5" />,
-        title: 'Website Development',
-        description: 'We build all types of websites. Online stores, business websites, personal portfolios, landing pages, or custom dashboards. You name it, we build it.',
+        name: 'Online Stores',
+        tag: 'E-Commerce',
+        desc: 'Sell products online with smooth payments, inventory management, and live order tracking.',
+        deliverables: ['Custom Product Pages', 'Razorpay & Stripe Setup', 'Fast Mobile Checkout'],
         illustration: '/svgs/undraw_system-update_pc33.svg',
+        color: '#ea580c'
     },
     {
-        icon: <Rocket className="w-5 h-5" />,
-        title: 'Ad Campaigns',
-        description: 'We run your ads on YouTube, Instagram, and Google. We handle the targeting, the creatives, and the budget so your ads reach the right people.',
+        name: 'SaaS Platforms',
+        tag: 'Web Apps',
+        desc: 'Web applications with user login, subscription billing, and real-time customer dashboards.',
+        deliverables: ['Secure Authentication', 'Stripe Billing System', 'Interactive User Dashboards'],
         illustration: '/svgs/undraw_online-ad_703t.svg',
+        color: '#2563eb'
     },
     {
-        icon: <Globe className="w-5 h-5" />,
-        title: 'Digital Marketing',
-        description: 'We help your brand grow online. SEO to rank on Google, content that people actually read, and social media that builds a real audience.',
+        name: 'Business Websites',
+        tag: 'Corporate',
+        desc: 'Professional websites that make your company look credible, trustworthy, and modern.',
+        deliverables: ['Modern Brand Layout', 'Mobile Friendly Design', 'Clear Service Showcase'],
+        illustration: '/svgs/undraw_collaboration_hkrb.svg',
+        color: '#059669'
+    },
+    {
+        name: 'Portfolio Sites',
+        tag: 'Creators',
+        desc: 'Showcase your creative work, photography, or design projects with clean aesthetic layouts.',
+        deliverables: ['Visual Media Gallery', 'Fast Loading Times', 'Direct Contact Funnel'],
         illustration: '/svgs/undraw_marketing-analysis_2u5r.svg',
+        color: '#7c3aed'
+    },
+    {
+        name: 'Landing Pages',
+        tag: 'Marketing',
+        desc: 'Single-page sites engineered specifically to convert visitors into booked calls or buyers.',
+        deliverables: ['Persuasive Copywriting', 'Calendar Booking Embed', 'A/B Test Ready'],
+        illustration: '/svgs/undraw_make-it-rain_ylfg.svg',
+        color: '#0284c7'
+    },
+    {
+        name: 'Admin Dashboards',
+        tag: 'Operations',
+        desc: 'Custom back-office panels to manage your daily orders, user data, and business numbers.',
+        deliverables: ['Live Analytics Data', 'Order & User Management', 'Automated Export Reports'],
+        illustration: '/svgs/undraw_growth-chart_4iho.svg',
+        color: '#d97706'
     }
 ]
 
-const websiteTypes = [
-    { icon: <ShoppingBag className="w-5 h-5" />, name: 'Online Stores', desc: 'Sell products online with payments, inventory, and delivery tracking.', illustration: '/svgs/undraw_system-update_pc33.svg' },
-    { icon: <Monitor className="w-5 h-5" />, name: 'SaaS Platforms', desc: 'Web apps with login, subscription billing, and user dashboards.', illustration: '/svgs/undraw_online-ad_703t.svg' },
-    { icon: <Briefcase className="w-5 h-5" />, name: 'Business Websites', desc: 'Professional websites that make your company look credible and trustworthy.', illustration: '/svgs/undraw_collaboration_hkrb.svg' },
-    { icon: <Palette className="w-5 h-5" />, name: 'Portfolio Sites', desc: 'Beautiful websites to showcase your work, photography, or design projects.', illustration: '/svgs/undraw_marketing-analysis_2u5r.svg' },
-    { icon: <Rocket className="w-5 h-5" />, name: 'Landing Pages', desc: 'Single-page websites designed to get people to sign up or buy.', illustration: '/svgs/undraw_make-it-rain_ylfg.svg' },
-    { icon: <LayoutDashboard className="w-5 h-5" />, name: 'Admin Panels', desc: 'Custom dashboards to manage your orders, users, and business data.', illustration: '/svgs/undraw_growth-chart_4iho.svg' },
+const comparisonFeatures = [
+    { name: 'Custom Next.js code with zero bloated templates', others: false, akprints: true },
+    { name: 'Direct Senior Engineer pairing without account managers', others: false, akprints: true },
+    { name: 'Full ad creative scripting, hook testing & video editing', others: false, akprints: true },
+    { name: 'Multi-channel ad management (Meta, Google & YouTube)', others: true, akprints: true },
+    { name: 'Sub-second edge page loading speeds (95+ Core Web Vitals)', others: false, akprints: true },
+    { name: 'Server-side CAPI tracking to prevent iOS ad data loss', others: false, akprints: true },
+    { name: 'Fast 2 to 4 week sprint delivery', others: false, akprints: true },
+    { name: 'Direct Slack and WhatsApp daily communication', others: false, akprints: true },
+    { name: '100% intellectual property & source code ownership', others: true, akprints: true }
 ]
 
-const adPlatforms = [
+const comparisonPills = [
+    'One-Click Checkout',
+    'Custom Webhooks',
+    'A/B Testing',
+    'Multi-Currency Support',
+    'ROAS Telemetry',
+    'SEO Structured Schema',
+    'Razorpay & Stripe',
+    'Fast Edge Caching'
+]
+
+const deliveredProjects = [
     {
-        icon: <Youtube className="w-7 h-7" />,
-        name: 'YouTube Ads',
-        color: '#FF0000',
-        description: 'Video ads that show up before, during, or after YouTube videos. Great for brand awareness and reaching millions of viewers.',
-        illustration: '/svgs/undraw_make-it-rain_ylfg.svg',
+        id: 1,
+        title: 'Vastu Mentor',
+        clientType: 'Online Store & Consultation Platform',
+        logo: '/images/vm.png',
+        image: '/images/project-vastu-showcase.jpg',
+        description: 'A complete Vastu consultation and product shopping website. Customers can book consultations, pay online via Razorpay, and track shipments through Shiprocket.',
+        results: [
+            { label: 'Sales Growth', val: '+240%' },
+            { label: 'Server Latency', val: '94ms' },
+            { label: 'Automated Bookings', val: '14,000+' }
+        ],
+        tech: ['Next.js', 'MongoDB', 'Razorpay', 'Shiprocket', 'Tailwind CSS'],
+        link: 'https://vastumentor.com'
     },
     {
-        icon: <Instagram className="w-7 h-7" />,
-        name: 'Instagram Ads',
-        color: '#E1306C',
-        description: 'Ads in Reels, Stories, and feed posts. Perfect for fashion, food, lifestyle, and any visual brand that wants to grow fast.',
-        illustration: '/svgs/undraw_revenue-analysis_fjh2.svg',
+        id: 2,
+        title: 'MuskySnax',
+        clientType: 'Gourmet Food Brand',
+        logo: '/images/musky.webp',
+        image: '/images/project-musky-showcase.jpg',
+        description: 'A premium snack delivery website. Customers place orders with instant checkout, get real-time delivery notifications via email, and the brand manages operations from one dashboard.',
+        results: [
+            { label: 'First Month Orders', val: '2,800+' },
+            { label: 'Mobile Conversion', val: '4.8%' },
+            { label: 'Lighthouse Score', val: '99/100' }
+        ],
+        tech: ['Next.js App Router', 'Tailwind CSS', 'Framer Motion', 'Cloudflare Edge'],
+        link: 'https://muskysnax.in'
     },
     {
-        icon: <Search className="w-7 h-7" />,
-        name: 'Google Ads',
-        color: '#4285F4',
-        description: 'Show up at the top of Google when people search for your service. You only pay when someone clicks. Best for getting customers who are ready to buy.',
-        illustration: '/svgs/undraw_growth-chart_4iho.svg',
+        id: 3,
+        title: 'Multi-Channel Ad Scaling',
+        clientType: 'Performance Advertising Engine',
+        image: '/images/ads-performance-dashboard.jpg',
+        description: 'We ran high-converting video and search ad campaigns on Instagram, YouTube, and Google with custom creative hooks and server-side tracking.',
+        results: [
+            { label: 'Average ROAS', val: '6.2x' },
+            { label: 'Tracked Spend', val: '$420k+' },
+            { label: 'Acquisition Cost', val: '-32%' }
+        ],
+        tech: ['Meta Ads Manager', 'Google Search Ads', 'YouTube In-Stream', 'GA4 Analytics'],
+        link: '#contact'
     }
 ]
 
 const teamMembers = [
-    { role: 'Content Writer', icon: <PenTool className="w-5 h-5" />, description: 'Writes the words on your website and ads that make people take action.' },
-    { role: 'Design Engineer', icon: <Figma className="w-5 h-5" />, description: 'Turns designs into real, working, interactive websites.' },
-    { role: 'UI/UX Designer', icon: <Palette className="w-5 h-5" />, description: 'Makes sure your website looks great and is easy for everyone to use.' },
-    { role: 'Forward Deployed Engineer', icon: <Cpu className="w-5 h-5" />, description: 'Works directly with you to build exactly what your business needs.' },
-    { role: 'System Design Engineer', icon: <Server className="w-5 h-5" />, description: 'Builds the backend so your website stays fast even with heavy traffic.' },
-]
-
-const projects = [
     {
-        id: 1,
-        name: 'Vastu Mentor',
-        category: 'Online Store',
-        description: 'A complete Vastu consultation and product shopping website. Customers can buy products, pay online via Razorpay, and track their orders.',
-        tech: ['Next.js', 'MongoDB', 'Razorpay', 'Node.js', 'Shiprocket'],
-        link: 'https://vastumentor.com',
-        year: '2026'
+        role: 'Content Writer',
+        icon: PenTool,
+        description: 'Writes the words on your website and ads that make people take action and buy.'
     },
     {
-        id: 2,
-        name: 'MuskySnax',
-        category: 'Food Brand',
-        description: 'A premium snack delivery website. Customers place orders, get real-time delivery updates via email, and the brand manages everything from one dashboard.',
-        tech: ['Next.js', 'Tailwind', 'Framer Motion'],
-        link: 'https://muskysnax.in',
-        year: '2025'
+        role: 'Design Engineer',
+        icon: Figma,
+        description: 'Turns designs into real, fast, working, interactive websites.'
     },
+    {
+        role: 'UI/UX Designer',
+        icon: Palette,
+        description: 'Makes sure your website looks clean, modern, and is effortless for everyone to use.'
+    },
+    {
+        role: 'Forward Deployed Engineer',
+        icon: Cpu,
+        description: 'Works directly with you to build exactly what your business needs without middle managers.'
+    },
+    {
+        role: 'System Design Engineer',
+        icon: Server,
+        description: 'Builds the backend so your website stays fast and reliable even during heavy traffic spikes.'
+    }
 ]
 
-
-// ── SECTION LABEL ─────────────────────────────────────
-
-function SectionLabel({ children, C }) {
-    return (
-        <span className="inline-flex items-center gap-3 text-[11px] tracking-[0.25em] uppercase font-semibold mb-5"
-            style={{ color: C?.accentLight || '#818cf8' }}>
-            <span className="w-6 h-[2px] rounded-full" style={{ backgroundColor: C?.accentLight || '#818cf8' }} />
-            {children}
-        </span>
-    )
-}
-
+const faqs = [
+    {
+        q: 'How fast can you build and launch our website?',
+        a: 'Most bespoke websites and online stores are delivered within 2 to 4 weeks. For custom web applications, we work in clear weekly sprints with working previews.'
+    },
+    {
+        q: 'How does your ad campaign service work?',
+        a: 'We write the ad scripts, design the visual creatives, set up audience targeting on Instagram, Google, and YouTube, and optimize your budget daily to maximize return on ad spend.'
+    },
+    {
+        q: 'Do I get full ownership of my website and code?',
+        a: 'Yes, 100%. You own all source code, domain assets, ad accounts, and design files. We never lock you into proprietary platforms.'
+    },
+    {
+        q: 'How do we communicate during the project?',
+        a: 'We create a dedicated Slack or WhatsApp channel with your team for quick daily updates, accompanied by live milestone reviews.'
+    }
+]
 
 // ── MAIN COMPONENT ────────────────────────────────────
-
 export default function Home() {
-    const [hoveredProject, setHoveredProject] = useState(null)
-    const [isDarkMode, setIsDarkMode] = useState(true)
-
-    useEffect(() => {
-        if (isDarkMode) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    }, [isDarkMode])
-
-    const C = isDarkMode ? darkColors : lightColors
+    const [openFaq, setOpenFaq] = useState(null)
+    const [estimatorPlan, setEstimatorPlan] = useState('website')
+    const [estimatorBudget, setEstimatorBudget] = useState('standard')
+    const [estimatorStep, setEstimatorStep] = useState(1)
 
     useCalEmbed()
 
     const fadeIn = {
-        hidden: { opacity: 0, y: 24 },
+        hidden: { opacity: 0, y: 20 },
         visible: (d = 0) => ({
-            opacity: 1, y: 0,
-            transition: { duration: 0.5, delay: d, ease: [0.25, 0.1, 0.25, 1] }
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.5, delay: d, ease: [0.22, 1, 0.36, 1] }
         })
     }
 
     return (
-        <div className="min-h-screen antialiased overflow-x-hidden transition-colors duration-300" style={{ backgroundColor: C.bg, color: C.dark }}>
+        <div className="min-h-screen antialiased overflow-x-hidden bg-[#fafaf9] text-[#18181b]">
 
-            {/* ── NAV ── */}
-            <motion.nav
-                initial={{ y: -80 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-                className="fixed top-0 w-full z-50 backdrop-blur-xl transition-colors duration-300"
-                style={{ backgroundColor: isDarkMode ? 'rgba(9, 9, 11, 0.85)' : 'rgba(250, 250, 249, 0.85)', borderBottom: `1px solid ${C.border}` }}
-            >
-                <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-                    <span className="text-[13px] tracking-[0.18em] font-bold uppercase flex items-center gap-2" style={{ color: C.dark }}>
-                        <Image alt="logo" src={"/logo-v3.png"} width={100} height={100} className="dark:brightness-120 dark:invert-0" />
-                    </span>
-                    <div className="hidden md:flex items-center gap-8">
-                        {['Services', 'Team', 'Projects', 'Contact'].map(l => (
-                            <a key={l} href={`#${l.toLowerCase()}`}
-                                className="text-[14px] tracking-[0.12em] font-medium transition-colors duration-200 hover:opacity-100"
-                                style={{ color: C.muted }}
-                                onMouseEnter={e => e.target.style.color = C.dark}
-                                onMouseLeave={e => e.target.style.color = C.muted}>
-                                {l}
+            {/* ── DETACHED FLOATING ROUNDED NAVBAR ── */}
+            <div className="fixed top-4 inset-x-0 z-50 px-4 sm:px-6 pointer-events-none">
+                <motion.nav
+                    initial={{ y: -50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    className="max-w-5xl mx-auto rounded-full bg-white/90 backdrop-blur-xl border border-zinc-200/90 shadow-md px-6 py-3 flex justify-between items-center pointer-events-auto transition-all"
+                >
+                    {/* Brand Logo */}
+                    <a href="#" className="flex items-center gap-2.5 group">
+                        <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-extrabold text-sm shadow-xs group-hover:scale-105 transition-transform">
+                            ak
+                        </div>
+                        <span className="text-[16px] font-extrabold tracking-tight text-zinc-900">
+                            akprints<span className="text-blue-600">.</span>
+                        </span>
+                    </a>
+
+                    {/* Nav Links */}
+                    <div className="hidden md:flex items-center gap-7">
+                        {[
+                            { name: 'Services', href: '#services' },
+                            { name: 'Websites', href: '#websites' },
+                            { name: 'Why Us', href: '#comparison' },
+                            { name: 'Ads', href: '#ads' },
+                            { name: 'Work', href: '#projects' },
+                            { name: 'Team', href: '#team' },
+                            { name: 'Contact', href: '#contact' }
+                        ].map((l) => (
+                            <a
+                                key={l.name}
+                                href={l.href}
+                                className="text-base font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+                            >
+                                {l.name}
                             </a>
                         ))}
                     </div>
-                    <div className="flex items-center gap-3">
-                        {/* Dark Mode Toggle */}
-                        <button
-                            onClick={() => setIsDarkMode(!isDarkMode)}
-                            className="p-2.5 rounded-full border transition-all duration-300 flex items-center justify-center hover:scale-105 cursor-pointer shadow-sm"
-                            style={{
-                                backgroundColor: isDarkMode ? '#18181b' : '#f3f2ef',
-                                borderColor: C.border,
-                                color: C.dark
-                            }}
-                            title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-                            aria-label="Toggle Dark Mode"
-                        >
-                            {isDarkMode ? (
-                                <Sun className="w-4 h-4 text-amber-400" />
-                            ) : (
-                                <Moon className="w-4 h-4 text-zinc-700" />
-                            )}
-                        </button>
 
-                        <a href="#contact">
-                            <MagneticButtonDemo />
-                        </a>
-                    </div>
-                </div>
-            </motion.nav>
+                    {/* Action Button */}
+                    <a href="#contact">
+                        <MagneticButtonDemo text="Book a Call" />
+                    </a>
+                </motion.nav>
+            </div>
 
+            {/* ── HERO SECTION ── */}
             <AuroraBackgroundDemo />
 
+            {/* ── SOCIAL PROOF LOGO CAROUSEL COMPONENT (@ncdai/social-proof-01) ── */}
+            <SocialProof01 />
 
-
-            {/* ── SERVICES ── */}
-            <section id="services" className="py-28 sm:py-36 px-6">
+            {/* ── SECTION 1: EVERYTHING YOUR BUSINESS NEEDS TO GROW ONLINE (Image 1 Style) ── */}
+            <section id="services" className="py-24 sm:py-32 px-6">
                 <div className="max-w-6xl mx-auto">
-                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
-                        <h2 className="text-2xl sm:text-[2.5rem] text-center font-bold tracking-tight leading-snug mt-1 mb-14" style={{ color: C.dark }}>
-                            Everything your business needs<br className="hidden sm:block" />  <AuroraText>to grow online.</AuroraText>
-                        </h2>
-                    </motion.div>
+                    {/* Header with Heading Left + Description Right (Inspired by Image 1) */}
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-16">
+                        <div className="max-w-lg">
+                            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-[1.15]">
+                                Everything your business needs <span className="font-serif italic font-normal text-blue-600">to grow online.</span>
+                            </h2>
+                        </div>
+                        <div className="max-w-md lg:pt-2">
+                            <p className="text-[16px] sm:text-[17px] text-zinc-600 leading-relaxed">
+                                We partner with founders and marketing teams to engineer fast websites, high-converting stores, and profitable ad campaigns with total transparency.
+                            </p>
+                        </div>
+                    </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 max-w-7xl mx-auto w-full">
-                        {/* 1. Website Development (Span 2) */}
-                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}
-                            variants={fadeIn} custom={0.1} className="col-span-1 lg:col-span-2">
-                            <WobbleCard
-                                containerClassName="bg-orange-600 relative overflow-hidden min-h-[300px] h-full shadow-md"
-                                className="py-10 px-8 sm:px-10 h-full flex flex-col justify-between"
-                            >
-                                <div className="max-w-[65%] space-y-4">
-                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 text-white">
-                                        <Code2 className="w-5 h-5" />
+                    {/* 3 Soothing Clean Cards (Image 1 reference layout) */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+                        {/* Card 1: Websites & Online Stores */}
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            variants={fadeIn}
+                            custom={0.1}
+                            className="group rounded-3xl bg-[#fbfbfa] border border-zinc-200/80 p-7 flex flex-col justify-between hover:shadow-lg hover:border-zinc-300 transition-all duration-300 min-h-[380px]"
+                        >
+                            {/* Visual UI Box */}
+                            <div className="w-full h-44 rounded-2xl bg-white border border-zinc-200/60 p-4 flex flex-col justify-between shadow-xs relative overflow-hidden group-hover:scale-[1.02] transition-transform">
+                                <div className="flex items-center justify-between text-xs border-b border-zinc-100 pb-2.5">
+                                    <div className="flex items-center gap-1.5 font-bold text-zinc-800">
+                                        <Code2 className="w-3.5 h-3.5 text-blue-600" />
+                                        <span>Storefront Engine</span>
                                     </div>
-                                    <h3 className="text-[20px] font-bold text-white">
-                                        Website Development
+                                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">85ms Edge</span>
+                                </div>
+                                <div className="space-y-2 py-2">
+                                    <div className="flex items-center justify-between text-xs p-2 rounded-lg bg-zinc-50 border border-zinc-100">
+                                        <span className="font-medium text-zinc-700">One-Click Checkout</span>
+                                        <span className="text-[11px] text-zinc-500 font-bold">Razorpay / Stripe</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs p-2 rounded-lg bg-zinc-50 border border-zinc-100">
+                                        <span className="font-medium text-zinc-700">Mobile Speed</span>
+                                        <span className="text-[11px] text-emerald-600 font-bold">100/100 Core Vitals</span>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">Next.js 16</span>
+                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">Shopify</span>
+                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">Tailwind</span>
+                                </div>
+                            </div>
+
+                            {/* Card Info Bottom */}
+                            <div className="mt-6 flex items-center justify-between pt-2">
+                                <div>
+                                    <h3 className="text-xl font-bold text-zinc-900 tracking-tight pr-4">
+                                        Websites & Online Stores
                                     </h3>
-                                    <p className="text-[14px] leading-[1.75] text-neutral-200">
-                                        We build all types of websites. Online stores, business websites, personal portfolios, landing pages, or custom dashboards. You name it, we build it.
-                                    </p>
                                 </div>
-                                <div className="absolute -right-8 -bottom-10 w-[200px] sm:w-[240px] md:w-[260px] h-[200px] sm:h-[240px] opacity-80 pointer-events-none select-none">
-                                    <Image
-                                        src="/svgs/undraw_system-update_pc33.svg"
-                                        alt="Website Development"
-                                        fill
-                                        className="object-contain brightness-110"
-                                    />
+                                <div className="w-8 h-8 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-zinc-700 shrink-0 ml-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                    <Plus className="w-4 h-4" />
                                 </div>
-                            </WobbleCard>
+                            </div>
                         </motion.div>
 
-                        {/* 2. Ad Campaigns (Span 1) */}
-                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}
-                            variants={fadeIn} custom={0.2} className="col-span-1">
-                            <WobbleCard
-                                containerClassName="bg-indigo-700 relative overflow-hidden min-h-[300px] h-full shadow-md"
-                                className="py-10 px-8 sm:px-10 h-full flex flex-col justify-between"
-                            >
-                                <div className="space-y-4">
-                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 text-white">
-                                        <Rocket className="w-5 h-5" />
+                        {/* Card 2: Performance Ads */}
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            variants={fadeIn}
+                            custom={0.2}
+                            className="group rounded-3xl bg-[#fbfbfa] border border-zinc-200/80 p-7 flex flex-col justify-between hover:shadow-lg hover:border-zinc-300 transition-all duration-300 min-h-[380px]"
+                        >
+                            {/* Visual UI Box */}
+                            <div className="w-full h-44 rounded-2xl bg-white border border-zinc-200/60 p-4 flex flex-col justify-between shadow-xs relative overflow-hidden group-hover:scale-[1.02] transition-transform">
+                                <div className="flex items-center justify-between text-xs border-b border-zinc-100 pb-2.5">
+                                    <div className="flex items-center gap-1.5 font-bold text-zinc-800">
+                                        <Target className="w-3.5 h-3.5 text-blue-600" />
+                                        <span>Campaign Planner</span>
                                     </div>
-                                    <h3 className="text-[20px] font-bold text-white">
-                                        Ad Campaigns
+                                    <span className="text-[11px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">ROAS: 5.8x</span>
+                                </div>
+                                <div className="space-y-2 py-2">
+                                    <div className="flex items-center gap-2 text-xs text-zinc-700">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                        <span>Instagram Reels & Video Creatives</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-xs text-zinc-700">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                        <span>Google Search Exact-Match Intent</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-xs text-zinc-700">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                        <span>YouTube In-Stream Video Ads</span>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700">Meta CAPI</span>
+                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700">Google Ads</span>
+                                </div>
+                            </div>
+
+                            {/* Card Info Bottom */}
+                            <div className="mt-6 flex items-center justify-between pt-2">
+                                <div>
+                                    <h3 className="text-xl font-bold text-zinc-900 tracking-tight pr-4">
+                                        Targeted Ad Campaigns
                                     </h3>
-                                    <p className="text-[14px] leading-[1.75] text-neutral-200">
-                                        We run your ads on YouTube, Instagram, and Google. We handle targeting, creatives, and budget.
-                                    </p>
                                 </div>
-                                <div className="absolute -right-6 -bottom-10 w-[160px] h-[160px] opacity-75 pointer-events-none select-none">
-                                    <Image
-                                        src="/svgs/undraw_online-ad_703t.svg"
-                                        alt="Ad Campaigns"
-                                        fill
-                                        className="object-contain brightness-110"
-                                    />
+                                <div className="w-8 h-8 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-zinc-700 shrink-0 ml-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                    <Plus className="w-4 h-4" />
                                 </div>
-                            </WobbleCard>
+                            </div>
                         </motion.div>
 
-                        {/* 3. Digital Marketing (Span 3) */}
-                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}
-                            variants={fadeIn} custom={0.3} className="col-span-1 lg:col-span-3">
-                            <WobbleCard
-                                containerClassName="bg-blue-800 relative overflow-hidden min-h-[260px] h-full shadow-md"
-                                className="py-10 px-8 sm:px-10 h-full flex flex-col justify-between"
-                            >
-                                <div className="max-w-[70%] space-y-4">
-                                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/10 text-white">
-                                        <Globe className="w-5 h-5" />
+                        {/* Card 3: SEO & Conversion Optimization */}
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            variants={fadeIn}
+                            custom={0.3}
+                            className="group rounded-3xl bg-[#fbfbfa] border border-zinc-200/80 p-7 flex flex-col justify-between hover:shadow-lg hover:border-zinc-300 transition-all duration-300 min-h-[380px]"
+                        >
+                            {/* Visual UI Box */}
+                            <div className="w-full h-44 rounded-2xl bg-white border border-zinc-200/60 p-4 flex flex-col justify-between shadow-xs relative overflow-hidden group-hover:scale-[1.02] transition-transform">
+                                <div className="flex items-center justify-between text-xs border-b border-zinc-100 pb-2.5">
+                                    <div className="flex items-center gap-1.5 font-bold text-zinc-800">
+                                        <Shield className="w-3.5 h-3.5 text-emerald-600" />
+                                        <span>Growth & SEO Engine</span>
                                     </div>
-                                    <h3 className="text-[20px] font-bold text-white">
-                                        Digital Marketing
+                                    <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Page 1 Rank</span>
+                                </div>
+                                <div className="space-y-2 py-2">
+                                    <div className="flex items-center justify-between text-xs p-2 rounded-lg bg-zinc-50 border border-zinc-100">
+                                        <span className="font-medium text-zinc-700">Conversion Rate</span>
+                                        <span className="text-[11px] text-emerald-600 font-bold">+38% Lift</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs p-2 rounded-lg bg-zinc-50 border border-zinc-100">
+                                        <span className="font-medium text-zinc-700">Search Keywords</span>
+                                        <span className="text-[11px] text-blue-600 font-bold">Top Positions</span>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">Schema SEO</span>
+                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">CRO Funnels</span>
+                                </div>
+                            </div>
+
+                            {/* Card Info Bottom */}
+                            <div className="mt-6 flex items-center justify-between pt-2">
+                                <div>
+                                    <h3 className="text-xl font-bold text-zinc-900 tracking-tight pr-4">
+                                        Conversion & SEO Growth
                                     </h3>
-                                    <p className="text-[14px] leading-[1.75] text-neutral-200">
-                                        We help your brand grow online. SEO to rank on Google, content that people actually read, and social media that builds a real, engaged audience.
-                                    </p>
                                 </div>
-                                <div className="absolute -right-8 -bottom-8 w-[200px] sm:w-[240px] md:w-[280px] h-[200px] sm:h-[240px] opacity-80 pointer-events-none select-none">
-                                    <Image
-                                        src="/svgs/undraw_marketing-analysis_2u5r.svg"
-                                        alt="Digital Marketing"
-                                        fill
-                                        className="object-contain brightness-110"
-                                    />
+                                <div className="w-8 h-8 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-zinc-700 shrink-0 ml-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                    <Plus className="w-4 h-4" />
                                 </div>
-                            </WobbleCard>
+                            </div>
                         </motion.div>
                     </div>
                 </div>
             </section>
 
-            {/* ── WEBSITES WE BUILD ── */}
-            <section className="relative py-28 sm:py-36 px-6 overflow-hidden" style={{ backgroundColor: C.bgAlt }}>
+            {/* ── SECTION 2: WEBSITES WE BUILD ── */}
+            <section id="websites" className="py-24 sm:py-32 px-6 bg-[#f4f4f2]/70 border-y border-zinc-200/80 relative">
                 <BackgroundRippleEffect />
                 <div className="relative z-10 max-w-6xl mx-auto">
-                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
-                        <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1 mb-16 text-center" style={{ color: C.dark }}>
-                            Tell us what you need.<br className="hidden sm:block" /> We will build it.
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
+                            Tell us what you need. <span className="font-serif italic font-normal text-blue-600">We will build it.</span>
                         </h2>
-                    </motion.div>
+                        <p className="mt-5 text-lg sm:text-[20px] text-zinc-600 leading-relaxed font-normal">
+                            From global high-volume e-commerce flagships to complex cloud SaaS portals, we build digital infrastructure tailored to your exact business requirements.
+                        </p>
+                    </div>
 
-                    {/* Fancy Grid Card Container */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 mt-12">
-                        {websiteTypes.map((t, i) => (
+                    {/* 6 Clean Website Types Cards (Larger, no icons) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                        {websiteTypes.map((type, idx) => (
                             <motion.div
-                                key={i}
+                                key={type.name}
                                 initial="hidden"
                                 whileInView="visible"
                                 viewport={{ once: true }}
                                 variants={fadeIn}
-                                custom={i * 0.08}
-                                className="group relative bg-white dark:bg-zinc-900 border border-neutral-200/60 dark:border-zinc-800/85 rounded-2xl p-8 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 hover:border-indigo-500/30 transition-all duration-300 min-h-[420px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]"
+                                custom={idx * 0.07}
+                                className="group relative rounded-3xl bg-white border border-zinc-200/90 p-8 sm:p-10 flex flex-col justify-start hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                             >
-                                <div className="space-y-4">
-                                    <h3 className="text-xl font-extrabold text-neutral-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
-                                        {t.name}
-                                    </h3>
-                                    <p className="text-[15px] leading-relaxed text-neutral-600 dark:text-zinc-400">
-                                        {t.desc}
-                                    </p>
-                                </div>
+                                <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 tracking-tight group-hover:text-blue-600 transition-colors">
+                                    {type.name}
+                                </h3>
+                                <p className="text-base sm:text-lg text-zinc-600 leading-relaxed mt-4">
+                                    {type.desc}
+                                </p>
 
-                                {/* Hover-zoom SVG illustration at the bottom */}
-                                <div className="pt-6 flex justify-center overflow-hidden h-[160px] items-end relative rounded-xl bg-gradient-to-t from-neutral-50/50 to-transparent dark:from-zinc-950/20">
-                                    <Image
-                                        src={t.illustration}
-                                        alt={t.name}
-                                        width={200}
-                                        height={150}
-                                        className="select-none object-contain h-full w-auto transition-transform duration-500 group-hover:scale-105"
-                                    />
+                                <div className="mt-6 pt-5 border-t border-zinc-100 space-y-2">
+                                    {type.deliverables.map((deliv, dIdx) => (
+                                        <div key={dIdx} className="flex items-center gap-3 text-sm font-medium text-zinc-600">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                                            <span>{deliv}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             </motion.div>
                         ))}
@@ -411,258 +515,560 @@ export default function Home() {
                 </div>
             </section>
 
-
-            {/* ── AD PLATFORMS ── */}
-            <section className="py-28 sm:py-36 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}>
-                        <SectionLabel C={C}>We Run Your Ads</SectionLabel>
-                        <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1 mb-14" style={{ color: C.dark }}>
-                            We put your brand in front<br className="hidden sm:block" /> of the right people.
+            {/* ── SECTION 3: COMPARISON (Image 2 Style - akprints vs Others) ── */}
+            <section id="comparison" className="py-24 sm:py-32 px-6 bg-white">
+                <div className="max-w-5xl mx-auto">
+                    {/* Header */}
+                    <div className="text-center max-w-2xl mx-auto mb-16">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-xs font-bold text-zinc-700 uppercase tracking-wider mb-4">
+                            akprints vs Others
+                        </div>
+                        <h2 className="text-3xl sm:text-5xl font-medium tracking-tight text-zinc-900 leading-tight">
+                            Why akprints Beats <AuroraText className="font-serif italic font-normal">Every Competitor</AuroraText>
                         </h2>
-                    </motion.div>
+                        <p className="text-lg text-zinc-600 mt-4 leading-relaxed">
+                            Direct senior engineer craft with zero agency fluff, built for brands that want results.
+                        </p>
+                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {adPlatforms.map((p, i) => (
-                            <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                                variants={fadeIn} custom={i * 0.1}
-                                className="group rounded-2xl p-7 sm:p-8 transition-all duration-300 hover:shadow-md overflow-hidden relative"
-                                style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
+                    {/* Comparison Table Card (Image 2 style) */}
+                    <div className="rounded-3xl border border-zinc-200/90 bg-white shadow-xl overflow-hidden">
+                        {/* Table Header */}
+                        <div className="grid grid-cols-12 border-b border-zinc-200/80 bg-zinc-50/70 text-sm font-bold uppercase tracking-wider text-zinc-500">
+                            <div className="col-span-6 p-5 sm:p-6 text-zinc-800">Features & Standards</div>
+                            <div className="col-span-3 p-5 sm:p-6 text-center border-x border-zinc-200/80">Traditional Agencies</div>
+                            <div className="col-span-3 p-5 sm:p-6 text-center bg-blue-600 text-white font-extrabold">akprints</div>
+                        </div>
 
-                                <div className="flex items-center justify-between mb-5">
-                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center"
-                                        style={{ backgroundColor: `${p.color}10`, color: p.color }}>
-                                        {p.icon}
+                        {/* Rows */}
+                        <div className="divide-y divide-zinc-100">
+                            {comparisonFeatures.map((row, i) => (
+                                <div key={i} className="grid grid-cols-12 items-center hover:bg-zinc-50/50 transition-colors">
+                                    <div className="col-span-6 p-4 sm:p-5 text-base sm:text-lg font-semibold text-zinc-800 flex items-center gap-3">
+                                        <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 hidden sm:block" />
+                                        <span>{row.name}</span>
+                                    </div>
+                                    <div className="col-span-3 p-4 sm:p-5 text-center border-x border-zinc-100">
+                                        {row.others ? (
+                                            <Check className="w-5 h-5 text-zinc-500 mx-auto" />
+                                        ) : (
+                                            <X className="w-5 h-5 text-zinc-300 mx-auto" />
+                                        )}
+                                    </div>
+                                    <div className="col-span-3 p-4 sm:p-5 text-center bg-blue-50/40">
+                                        <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center mx-auto shadow-xs">
+                                            <Check className="w-3.5 h-3.5 stroke-[3]" />
+                                        </div>
                                     </div>
                                 </div>
-                                <h3 className="text-xl font-bold mb-2" style={{ color: C.dark }}>{p.name}</h3>
-                                <p className="text-[14px] leading-[1.75] mb-5" style={{ color: C.dark }}>{p.description}</p>
+                            ))}
+                        </div>
+                    </div>
 
-                                <div className="flex justify-end opacity-100 transition-opacity duration-500">
-                                    <Image src={p.illustration} alt={p.name} width={120} height={80} className="select-none" />
-                                </div>
-                            </motion.div>
+                    {/* Feature Badges Cloud (Image 2 style) */}
+                    <div className="flex flex-wrap items-center justify-center gap-2.5 mt-10">
+                        {comparisonPills.map((pill, i) => (
+                            <span key={i} className="px-4 py-2 rounded-full bg-zinc-100/90 border border-zinc-200 text-xs font-semibold text-zinc-700">
+                                {pill}
+                            </span>
                         ))}
                     </div>
                 </div>
             </section>
 
-
-            {/* ── TEAM ── */}
-            <TeamPage/>
-
-            {/* ── PROJECTS ── */}
-            <section id="projects" className="py-28 sm:py-36 px-6">
+            {/* ── SECTION 4: WE RUN YOUR ADS (Image 3 Style) ── */}
+            <section id="ads" className="py-24 sm:py-32 px-6 bg-[#f4f4f2]/70 border-y border-zinc-200/80">
                 <div className="max-w-6xl mx-auto">
-                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0} className="mb-16">
-                        <SectionLabel C={C}>Our Work</SectionLabel>
-                        <h2 className="text-2xl sm:text-[2.5rem] font-bold tracking-tight leading-snug mt-1" style={{ color: C.dark }}>
+                    {/* Header */}
+                    <div className="max-w-3xl mb-16">
+                        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-[1.15]">
+                            We put your brand in front <span className="font-serif italic font-normal text-blue-600">of the right people</span>.
+                        </h2>
+                        <p className="mt-4 text-[16px] text-zinc-600 leading-relaxed">
+                            We write, design, and run targeted ad campaigns on Instagram, YouTube, and Google Search so your business reaches customers ready to buy.
+                        </p>
+                    </div>
+
+                    {/* 3 Visual Cards (Image 3 layout) */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+                        {/* Card 1: Find the right audience */}
+                        <div className="flex flex-col justify-between">
+                            <div className="h-64 rounded-3xl bg-linear-to-b from-amber-50 to-orange-50 border border-amber-200/60 p-6 flex flex-col justify-center items-center shadow-xs">
+                                <div className="w-full max-w-xs rounded-2xl bg-white p-4 border border-amber-100 shadow-md space-y-3">
+                                    <div className="flex items-center justify-between text-xs font-bold text-zinc-800 border-b border-zinc-100 pb-2">
+                                        <span>Target Audience</span>
+                                        <span className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md font-semibold">High Intent</span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
+                                            IG
+                                        </div>
+                                        <div>
+                                            <span className="text-xs font-bold text-zinc-900 block">Reels & Stories Buyers</span>
+                                            <span className="text-[11px] text-zinc-500 block">Lookalike 1% Active Shoppers</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full bg-red-100 text-red-700 flex items-center justify-center font-bold text-xs">
+                                            YT
+                                        </div>
+                                        <div>
+                                            <span className="text-xs font-bold text-zinc-900 block">In-Stream Video Intent</span>
+                                            <span className="text-[11px] text-zinc-500 block">Competitor Viewers</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-5">
+                                <h3 className="text-lg font-bold text-zinc-900 tracking-tight">Find the right audience</h3>
+                                <p className="text-[14px] text-zinc-600 leading-relaxed mt-1.5">
+                                    We build high-intent audience segments on Instagram, Google Search, and YouTube so your ad budget reaches ready buyers.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Card 2: Creatives that convert */}
+                        <div className="flex flex-col justify-between">
+                            <div className="h-64 rounded-3xl overflow-hidden relative shadow-xs border border-zinc-200/80">
+                                <Image
+                                    src="/images/agency-team-craft.jpg"
+                                    alt="akprints creative ad production team"
+                                    fill
+                                    className="object-cover"
+                                />
+                                <div className="absolute inset-0 bg-linear-to-t from-zinc-900/60 to-transparent" />
+                                <div className="absolute bottom-4 left-4 right-4 text-white text-xs font-semibold">
+                                    <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full">
+                                        High-Hook Video Scripts
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="mt-5">
+                                <h3 className="text-lg font-bold text-zinc-900 tracking-tight">Creatives that convert</h3>
+                                <p className="text-[14px] text-zinc-600 leading-relaxed mt-1.5">
+                                    We script, edit, and design eye-catching video ads and creatives that stop the scroll and make people take action.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Card 3: Live ROAS Optimization */}
+                        <div className="flex flex-col justify-between">
+                            <div className="h-64 rounded-3xl bg-linear-to-b from-blue-50 to-indigo-50 border border-blue-200/60 p-6 flex flex-col justify-center items-center shadow-xs">
+                                <div className="w-full max-w-xs rounded-2xl bg-white p-4 border border-blue-100 shadow-md space-y-3">
+                                    <div className="flex items-center justify-between text-xs font-bold text-zinc-800 border-b border-zinc-100 pb-2">
+                                        <span>Live ROAS Telemetry</span>
+                                        <span className="text-[11px] text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md font-semibold">Real-Time</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="text-zinc-600">Average ROAS</span>
+                                        <span className="font-extrabold text-blue-600 text-sm">5.8x Return</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="text-zinc-600">Cost Per Acquisition</span>
+                                        <span className="font-extrabold text-emerald-600 text-sm">-32% CPA</span>
+                                    </div>
+                                    <div className="pt-1 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-500">
+                                        <span>Server CAPI Active</span>
+                                        <span className="text-emerald-600 font-bold">100% Signal Match</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-5">
+                                <h3 className="text-lg font-bold text-zinc-900 tracking-tight">Live budget optimization</h3>
+                                <p className="text-[14px] text-zinc-600 leading-relaxed mt-1.5">
+                                    We monitor daily numbers, test winning ads, and scale profitable campaigns without burning your marketing budget.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ── SECTION 5: PROJECTS WE HAVE DELIVERED (Restored & Clean) ── */}
+            <section id="projects" className="py-24 sm:py-32 px-6 bg-white">
+                <div className="max-w-6xl mx-auto">
+                    <div className="text-center max-w-2xl mx-auto mb-16">
+                        <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block mb-2">
+                            Our Work
+                        </span>
+                        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
                             Projects we have delivered.
                         </h2>
-                    </motion.div>
+                        <p className="mt-3 text-[16px] text-zinc-600">
+                            Real websites, online stores, and profitable ad campaigns delivered for our clients.
+                        </p>
+                    </div>
 
-                    <div className="space-y-0">
-                        {projects.map((project, idx) => (
+                    <div className="space-y-12">
+                        {deliveredProjects.map((project, idx) => (
                             <motion.div
                                 key={project.id}
-                                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                                onMouseEnter={() => setHoveredProject(project.id)}
-                                onMouseLeave={() => setHoveredProject(null)}
-                                className="group py-10 sm:py-14 first:border-t -mx-6 px-6 transition-colors duration-300"
-                                style={{ borderBottom: `1px solid ${C.border}` }}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                variants={fadeIn}
+                                custom={idx * 0.1}
+                                className="rounded-3xl bg-[#fafaf9] border border-zinc-200/90 overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
                             >
-                                <a href={project.link} target="_blank" rel="noopener noreferrer" className="block">
-                                    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-12">
-                                        <div className="flex-1 space-y-3">
-                                            <div className="flex items-baseline gap-3">
-                                                <h3 className="font-bold tracking-tight transition-colors duration-300"
-                                                    style={{
-                                                        fontSize: 'clamp(1.75rem, 5vw, 3.5rem)',
-                                                        lineHeight: 1,
-                                                        color: hoveredProject === project.id ? C.accent : C.dark
-                                                    }}>
-                                                    {project.name}
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+                                    {/* Image Column */}
+                                    <div className="lg:col-span-6 relative h-[280px] sm:h-[360px] lg:h-auto min-h-[320px] bg-zinc-100">
+                                        <Image
+                                            src={project.image}
+                                            alt={project.title}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                        <div className="absolute top-5 left-5 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-xs font-bold text-zinc-900 border border-white/60 shadow-xs">
+                                            {project.clientType}
+                                        </div>
+                                    </div>
+
+                                    {/* Content Column */}
+                                    <div className="lg:col-span-6 p-7 sm:p-10 flex flex-col justify-between">
+                                        <div>
+                                            <div className="flex items-center gap-3 mb-2">
+                                                {project.logo && (
+                                                    <div className="relative w-8 h-8 rounded-lg overflow-hidden bg-white border border-zinc-200 flex items-center justify-center">
+                                                        <Image src={project.logo} alt={project.title} width={28} height={28} className="object-contain" />
+                                                    </div>
+                                                )}
+                                                <h3 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
+                                                    {project.title}
                                                 </h3>
-                                                <motion.div
-                                                    animate={{ x: hoveredProject === project.id ? 4 : 0, y: hoveredProject === project.id ? -4 : 0 }}
-                                                    transition={{ duration: 0.2 }}>
-                                                    <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                                        style={{ color: C.accent }} />
-                                                </motion.div>
                                             </div>
-                                            <p className="max-w-xl text-[14px] leading-[1.75]" style={{ color: C.body }}>{project.description}</p>
+
+                                            <p className="text-[14.5px] text-zinc-600 leading-relaxed mt-3">
+                                                {project.description}
+                                            </p>
+
+                                            {/* Results Highlights */}
+                                            <div className="grid grid-cols-3 gap-3 my-6">
+                                                {project.results.map((res, rIdx) => (
+                                                    <div key={rIdx} className="p-3 rounded-xl bg-white border border-zinc-200/80 text-center">
+                                                        <span className="text-lg sm:text-xl font-extrabold text-zinc-900 block">
+                                                            {res.val}
+                                                        </span>
+                                                        <span className="text-[11px] text-zinc-500 block mt-0.5 font-medium">
+                                                            {res.label}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* Tech stack */}
                                             <div className="flex flex-wrap gap-2 pt-1">
-                                                {project.tech.map((t, i) => (
-                                                    <span key={i} className="text-[11px] tracking-wider font-medium px-2.5 py-1 rounded-md"
-                                                        style={{ backgroundColor: `${C.accent}12`, color: C.muted }}>
+                                                {project.tech.map((t, tIdx) => (
+                                                    <span key={tIdx} className="text-[11.5px] font-medium px-3 py-1 rounded-md bg-white text-zinc-700 border border-zinc-200">
                                                         {t}
                                                     </span>
                                                 ))}
                                             </div>
                                         </div>
-                                        <div className="flex md:flex-col items-center md:items-end gap-2 text-right">
-                                            <span className="text-[11px] tracking-[0.18em] uppercase font-semibold" style={{ color: C.accentLight }}>{project.category}</span>
-                                            <span className="font-semibold text-2xl sm:text-3xl" style={{ color: `${C.accent}60` }}>{project.year}</span>
+
+                                        <div className="pt-6 mt-6 border-t border-zinc-200/70 flex items-center justify-between">
+                                            <span className="text-xs text-zinc-500 font-medium">
+                                                Live & Active
+                                            </span>
+                                            <a
+                                                href={project.link}
+                                                target={project.link.startsWith('http') ? '_blank' : '_self'}
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors group"
+                                            >
+                                                <span>View Live Project</span>
+                                                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                            </a>
                                         </div>
                                     </div>
-                                </a>
+                                </div>
                             </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
 
-
-            {/* ── START A PROJECT ── */}
-            <section className="py-28 sm:py-36 px-6" style={{ backgroundColor: C.bgAlt }}>
+            {/* ── SECTION 6: OUR TEAM (Restored as earlier) ── */}
+            <section id="team" className="py-24 sm:py-32 px-6 bg-[#f4f4f2]/70 border-y border-zinc-200/80">
                 <div className="max-w-6xl mx-auto">
-                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0} className="mb-10">
-                        <SectionLabel C={C}>Start a Project</SectionLabel>
-                    </motion.div>
-                    <PricingFlow C={C} />
+                    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
+                        <div className="max-w-xl">
+                            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight mb-3">
+                                A team of specialists <span className="font-serif italic font-normal text-blue-600">behind every project</span>.
+                            </h2>
+                            <p className="text-[16px] text-zinc-600 leading-relaxed">
+                                You don't just get one developer. You get a full team of experts working together to deliver the best possible result.
+                            </p>
+                        </div>
+                        <div className="hidden lg:block shrink-0">
+                            <Image src="/svgs/undraw_collaboration_hkrb.svg" alt="Team" width={220} height={140} className="select-none" />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                        {teamMembers.map((m, i) => {
+                            const Icon = m.icon
+                            return (
+                                <motion.div
+                                    key={i}
+                                    initial="hidden"
+                                    whileInView="visible"
+                                    viewport={{ once: true }}
+                                    variants={fadeIn}
+                                    custom={i * 0.07}
+                                    className="group rounded-2xl p-5 text-center bg-white border border-zinc-200/80 transition-all duration-300 hover:shadow-md hover:border-blue-300"
+                                >
+                                    <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-4 bg-blue-50 text-blue-600 group-hover:scale-105 transition-transform duration-300">
+                                        <Icon className="w-5 h-5" />
+                                    </div>
+                                    <h4 className="text-[14px] font-bold text-zinc-900 leading-tight mb-1.5">
+                                        {m.role}
+                                    </h4>
+                                    <p className="text-[12px] text-zinc-600 leading-snug">
+                                        {m.description}
+                                    </p>
+                                </motion.div>
+                            )
+                        })}
+                    </div>
                 </div>
             </section>
 
-
-            {/* ── CONTACT ── */}
-            <section id="contact" className="py-28 sm:py-36 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} custom={0}
-                        className="flex flex-col items-center text-center space-y-8">
-
-                        <SectionLabel C={C}>Get In Touch</SectionLabel>
-
-                        <h2 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight" style={{ color: C.dark }}>
-                            Ready to grow?<br /> Let's talk.
+            {/* ── SECTION 7: START A PROJECT (Appealing & Clean) ── */}
+            <section id="start-project" className="py-24 sm:py-32 px-6 bg-white">
+                <div className="max-w-4xl mx-auto">
+                    <div className="text-center max-w-2xl mx-auto mb-14">
+                        <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block mb-2">
+                            Start a Project
+                        </span>
+                        <h2 className="text-3xl sm:text-5xl font-normal tracking-tight text-zinc-900 leading-tight">
+                            What do you need? <span className="font-serif italic text-blue-600">Let us build it</span>.
                         </h2>
-
-                        <p className="text-[15px] max-w-md leading-[1.75]" style={{ color: C.body }}>
-                            Book a free 30-minute call. Tell us what you need, and we will figure out the best way to make it happen.
+                        <p className="text-[16px] text-zinc-600 mt-3">
+                            Select your requirements below and schedule a quick call to get a clear scope and timeline.
                         </p>
+                    </div>
 
-                        {/* Growth illustration */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: 0.2 }}>
-                            <Image src="/svgs/undraw_growth-chart_4iho.svg" alt="Growth" width={180} height={120} className="opacity-50 select-none" />
-                        </motion.div>
+                    {/* Interactive Selector Card */}
+                    <div className="rounded-3xl bg-[#fafaf9] border border-zinc-200 p-7 sm:p-10 shadow-md">
+                        <div className="space-y-8">
+                            {/* Service Option Buttons */}
+                            <div>
+                                <label className="text-xs font-bold uppercase tracking-wider text-zinc-500 block mb-3">
+                                    1. Choose your primary goal
+                                </label>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                    {[
+                                        { id: 'website', icon: Palette, title: 'A New Website', desc: 'Modern, fast website designed to showcase your brand or company.' },
+                                        { id: 'ecommerce', icon: ShoppingBag, title: 'Online Store or Web App', desc: 'Full e-commerce setup with online payments and order management.' },
+                                        { id: 'ads', icon: Rocket, title: 'Paid Ads Management', desc: 'Targeted ad campaigns on Instagram, YouTube, and Google.' },
+                                        { id: 'growth', icon: TrendingUp, title: 'Complete Growth Package', desc: 'Custom website development combined with monthly ad management.' }
+                                    ].map(item => {
+                                        const Icon = item.icon
+                                        const isSelected = estimatorPlan === item.id
+                                        return (
+                                            <button
+                                                key={item.id}
+                                                type="button"
+                                                onClick={() => setEstimatorPlan(item.id)}
+                                                className={`p-5 rounded-2xl text-left border transition-all cursor-pointer ${
+                                                    isSelected
+                                                        ? 'bg-blue-50/70 border-blue-600 shadow-xs'
+                                                        : 'bg-white border-zinc-200 hover:bg-zinc-50'
+                                                }`}
+                                            >
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <div className="flex items-center gap-2.5">
+                                                        <div className={`p-2 rounded-lg ${isSelected ? 'bg-blue-600 text-white' : 'bg-zinc-100 text-zinc-700'}`}>
+                                                            <Icon className="w-4 h-4" />
+                                                        </div>
+                                                        <h4 className="font-bold text-[15px] text-zinc-900">{item.title}</h4>
+                                                    </div>
+                                                    {isSelected && <CheckCircle2 className="w-5 h-5 text-blue-600" />}
+                                                </div>
+                                                <p className="text-[13px] text-zinc-600 leading-snug">{item.desc}</p>
+                                            </button>
+                                        )
+                                    })}
+                                </div>
+                            </div>
 
+                            {/* Timeline Window */}
+                            <div>
+                                <label className="text-xs font-bold uppercase tracking-wider text-zinc-500 block mb-3">
+                                    2. Target timeline
+                                </label>
+                                <div className="grid grid-cols-3 gap-3">
+                                    {[
+                                        { id: 'rush', title: 'Rush Sprint', time: '1 to 2 Weeks' },
+                                        { id: 'standard', title: 'Standard Sprint', time: '2 to 4 Weeks' },
+                                        { id: 'monthly', title: 'Monthly Partnership', time: 'Ongoing' }
+                                    ].map(t => (
+                                        <button
+                                            key={t.id}
+                                            type="button"
+                                            onClick={() => setEstimatorBudget(t.id)}
+                                            className={`p-3.5 rounded-xl text-center border transition-all cursor-pointer ${
+                                                estimatorBudget === t.id
+                                                    ? 'bg-blue-50/70 border-blue-600 text-zinc-900 font-bold'
+                                                    : 'bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50'
+                                            }`}
+                                        >
+                                            <span className="text-xs font-bold block">{t.title}</span>
+                                            <span className="text-[11px] text-zinc-500 block mt-0.5">{t.time}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* CTA Action */}
+                            <div className="pt-4 border-t border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <p className="text-xs text-zinc-500 text-center sm:text-left">
+                                    Direct call with senior engineers. No spam or sales pressure.
+                                </p>
+                                <button
+                                    data-cal-link="shivam-verma-i3fold/30min"
+                                    className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg transition-transform hover:scale-105 cursor-pointer"
+                                >
+                                    <span>Schedule a Discovery Call</span>
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ── SECTION 8: FAQ SECTION ── */}
+            <section className="py-24 sm:py-32 px-6 bg-[#f4f4f2]/70 border-y border-zinc-200/80">
+                <div className="max-w-3xl mx-auto">
+                    <div className="text-center max-w-xl mx-auto mb-14">
+                        <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block mb-2">
+                            Questions
+                        </span>
+                        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
+                            Frequently Asked Questions
+                        </h2>
+                        <p className="text-[15px] text-zinc-600 mt-2">
+                            Clear answers to how we build websites and run ad campaigns.
+                        </p>
+                    </div>
+
+                    <div className="space-y-3.5">
+                        {faqs.map((faq, i) => {
+                            const isOpen = openFaq === i
+                            return (
+                                <div
+                                    key={i}
+                                    className="rounded-2xl border border-zinc-200/90 bg-white overflow-hidden shadow-xs transition-colors"
+                                >
+                                    <button
+                                        onClick={() => setOpenFaq(isOpen ? null : i)}
+                                        className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 font-bold text-[15.5px] text-zinc-900 cursor-pointer"
+                                    >
+                                        <span>{faq.q}</span>
+                                        <ChevronRight className={`w-4 h-4 text-zinc-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-90 text-blue-600' : ''}`} />
+                                    </button>
+                                    <AnimatePresence>
+                                        {isOpen && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="px-5 sm:px-6 pb-6 text-[14px] text-zinc-600 leading-relaxed border-t border-zinc-100 pt-3">
+                                                    {faq.a}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            {/* ── SECTION 9: GET IN TOUCH ── */}
+            <section id="contact" className="py-24 sm:py-32 px-6 bg-white">
+                <div className="max-w-4xl mx-auto text-center space-y-8">
+                    <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3.5 py-1.5 rounded-full border border-blue-200/60 inline-block">
+                        Get In Touch
+                    </span>
+
+                    <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
+                        Ready to grow? <span className="font-serif italic font-normal text-blue-600">Let us talk.</span>
+                    </h2>
+
+                    <p className="text-[16px] text-zinc-600 max-w-lg mx-auto leading-relaxed">
+                        Book a free 30-minute call. Tell us what you need, and we will figure out the best way to make it happen.
+                    </p>
+
+                    <div className="flex justify-center pt-2">
                         <button
                             data-cal-link="shivam-verma-i3fold/30min"
-                            className="group flex items-center gap-3 text-white rounded-full pl-7 pr-4 py-3.5 text-[14px] font-semibold transition-opacity duration-200 hover:opacity-90 cursor-pointer"
-                            style={{ backgroundColor: C.accent }}>
+                            className="group flex items-center gap-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full pl-7 pr-4 py-3.5 text-[14px] font-bold transition-all shadow-lg hover:scale-105 cursor-pointer"
+                        >
                             <span>Book a Free Call</span>
                             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
                                 <ArrowUpRight className="w-4 h-4" />
                             </div>
                         </button>
+                    </div>
 
-                        <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-14 w-full max-w-2xl mx-auto mt-12"
-                            style={{ borderTop: `1px solid ${C.border}` }}>
-                            {[
-                                { icon: Mail, label: 'Email', href: 'mailto:theadroitdev@gmail.com' },
-                                { icon: Github, label: 'GitHub', href: 'https://github.com/theadroitdev' },
-                                { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/shivam-verma-079780312/6' },
-                                { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/theadroitdev' }
-                            ].map((s, i) => (
-                                <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
-                                    className="flex flex-col items-center gap-2.5 pt-6 transition-colors duration-200 group"
-                                    style={{ color: C.muted }}
-                                    onMouseEnter={e => e.currentTarget.style.color = C.dark}
-                                    onMouseLeave={e => e.currentTarget.style.color = C.muted}>
-                                    <s.icon className="w-[18px] h-[18px] group-hover:scale-110 transition-transform" />
-                                    <span className="text-[11px] tracking-[0.15em] uppercase font-semibold">{s.label}</span>
+                    <div className="pt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto border-t border-zinc-200">
+                        {[
+                            { icon: Mail, label: 'Email', href: 'mailto:akprintsdev@gmail.com' },
+                            { icon: Github, label: 'GitHub', href: 'https://github.com/theadroitdev' },
+                            { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/shivam-verma-079780312/6' },
+                            { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/theadroitdev' }
+                        ].map((s, i) => {
+                            const Icon = s.icon
+                            return (
+                                <a
+                                    key={i}
+                                    href={s.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex flex-col items-center gap-2 p-3 rounded-xl hover:bg-zinc-50 transition-colors group"
+                                >
+                                    <Icon className="w-5 h-5 text-zinc-400 group-hover:text-blue-600 group-hover:scale-110 transition-transform" />
+                                    <span className="text-[11px] uppercase tracking-wider font-bold text-zinc-500">{s.label}</span>
                                 </a>
-                            ))}
-                        </div>
-                    </motion.div>
+                            )
+                        })}
+                    </div>
                 </div>
             </section>
 
+            {/* ── SECTION 10: WHITE FOOTER (As requested: footer is white, not black) ── */}
+            <footer className="py-8 px-6 bg-white border-t border-zinc-200 text-xs text-zinc-600">
+                <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div className="flex items-center gap-2 font-bold text-zinc-900">
+                        <div className="w-5 h-5 rounded-md bg-blue-600 text-white flex items-center justify-center text-[10px] font-extrabold">
+                            ak
+                        </div>
+                        <span>akprints</span>
+                        <span className="text-zinc-400 font-normal">/</span>
+                        <span className="text-zinc-500 font-normal">Websites, Ads & Growth</span>
+                    </div>
 
-            {/* ── FOOTER ── */}
-            <footer className="py-6 px-6" style={{ borderTop: `1px solid ${C.border}` }}>
-                <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
-                    <p className="text-[11px] tracking-[0.1em] uppercase font-semibold" style={{ color: C.muted }}>
-                        &copy; {new Date().getFullYear()} TheAdroitDev
-                    </p>
-                    <p className="text-[11px] tracking-wide" style={{ color: C.accentLight }}>
-                        Websites &middot; Ads &middot; Growth
+                    <div className="flex items-center gap-6">
+                        <a href="#services" className="hover:text-zinc-900 transition-colors">Services</a>
+                        <a href="#websites" className="hover:text-zinc-900 transition-colors">Websites</a>
+                        <a href="#comparison" className="hover:text-zinc-900 transition-colors">Why Us</a>
+                        <a href="#ads" className="hover:text-zinc-900 transition-colors">Ads</a>
+                        <a href="#projects" className="hover:text-zinc-900 transition-colors">Work</a>
+                        <a href="#contact" className="hover:text-zinc-900 transition-colors">Contact</a>
+                    </div>
+
+                    <p className="text-zinc-500">
+                        &copy; {new Date().getFullYear()} akprints. All rights reserved.
                     </p>
                 </div>
             </footer>
-        </div>
-    )
-}
-
-
-// ── PRICING FLOW ──────────────────────────────────────
-
-function PricingFlow({ C }) {
-    const [step, setStep] = useState(0)
-    const [selectedPlan, setSelectedPlan] = useState(null)
-
-    return (
-        <div className="w-full rounded-2xl p-6 sm:p-10 min-h-[380px] flex flex-col justify-center"
-            style={{ backgroundColor: C.card, border: `1px solid ${C.border}` }}>
-            <AnimatePresence mode="wait">
-                {step === 0 && (
-                    <motion.div key="s0" initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -15 }}
-                        className="space-y-7">
-                        <h3 className="text-xl sm:text-3xl font-bold" style={{ color: C.dark }}>What do you need?</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {[
-                                { key: 'frontend', icon: <Palette className="w-5 h-5" />, title: 'A New Website', desc: 'We will design and build a modern website for your brand or business.' },
-                                { key: 'ecommerce', icon: <ShoppingBag className="w-5 h-5" />, title: 'Online Store or Web App', desc: 'Full setup with payments, user accounts, admin panel, and delivery tracking.' },
-                            ].map(opt => (
-                                <button key={opt.key}
-                                    onClick={() => { setSelectedPlan(opt.key); setStep(1); }}
-                                    className="group text-left p-6 rounded-xl transition-all duration-200 hover:shadow-sm"
-                                    style={{ backgroundColor: C.bgAlt, border: `1px solid ${C.border}` }}>
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="p-2.5 rounded-lg group-hover:scale-105 transition-transform"
-                                            style={{ backgroundColor: `${C.accent}12`, color: C.accent }}>
-                                            {opt.icon}
-                                        </div>
-                                        <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: C.accentLight }} />
-                                    </div>
-                                    <h4 className="text-[15px] font-bold mb-1" style={{ color: C.dark }}>{opt.title}</h4>
-                                    <p className="text-[13px] leading-snug" style={{ color: C.body }}>{opt.desc}</p>
-                                </button>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-
-                {step === 1 && (
-                    <motion.div key="s1" initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -15 }}
-                        className="flex flex-col items-center text-center space-y-6">
-                        <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center">
-                            <Check className="w-7 h-7" />
-                        </div>
-                        <div>
-                            <h3 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: C.dark }}>Great choice!</h3>
-                            <p className="text-[14px] max-w-sm mx-auto leading-[1.75]" style={{ color: C.body }}>
-                                You selected <span className="font-semibold" style={{ color: C.dark }}>{selectedPlan === 'ecommerce' ? 'Online Store / Web App' : 'A New Website'}</span>.
-                                Let's get on a quick call to understand your requirements.
-                            </p>
-                        </div>
-                        <div className="flex flex-col sm:flex-row gap-3">
-                            <button onClick={() => setStep(0)}
-                                className="px-6 py-3 rounded-full text-[13px] font-semibold transition-colors cursor-pointer"
-                                style={{ border: `1px solid ${C.border}`, color: C.muted }}>
-                                Go Back
-                            </button>
-                            <button data-cal-link="shivam-verma-i3fold/30min"
-                                className="px-6 py-3 rounded-full text-white text-[13px] font-semibold transition-opacity hover:opacity-90 flex items-center gap-2 cursor-pointer"
-                                style={{ backgroundColor: C.accent }}>
-                                Schedule a Call <ChevronRight className="w-3.5 h-3.5" />
-                            </button>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </div>
     )
 }
