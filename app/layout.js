@@ -1,7 +1,7 @@
-import { Schibsted_Grotesk, Instrument_Serif } from "next/font/google";
+import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
-const schibsted = Schibsted_Grotesk({
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
@@ -10,7 +10,7 @@ const schibsted = Schibsted_Grotesk({
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: ["400"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   variable: "--font-serif",
   display: "swap",
 });
@@ -23,7 +23,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${schibsted.variable} ${instrumentSerif.variable} font-sans antialiased bg-[#fafaf9] text-[#18181b]`}>
+      <body className={`${inter.variable} ${instrumentSerif.variable} font-sans antialiased bg-[#fafaf9] text-[#18181b]`}>
         {children}
       </body>
     </html>
