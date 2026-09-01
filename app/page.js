@@ -9,14 +9,40 @@ import {
     Youtube, Instagram, Search,
     PenTool, Figma, Server, Cpu, Sparkles, TrendingUp, Zap, Target,
     CheckCircle2, X, Sliders, ArrowRight, UserCheck, Shield, Clock,
-    HelpCircle, Plus
+    HelpCircle, Plus, ChevronDown, Menu, Printer, Layers
 } from 'lucide-react'
+import { MorphIcon } from 'morphicons/react'
+import { Menu as LucideMenu, X as LucideX } from 'lucide'
+import { IconBrandWhatsapp } from '@tabler/icons-react'
 import Image from 'next/image'
 import AuroraBackgroundDemo from "@/components/aurora-background-demo"
 import MagneticButtonDemo from '@/components/magnetic-button-demo'
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect'
 import SocialProof01 from '@/components/social-proof-01'
 import { AuroraText } from '@/components/ui/aurora-text'
+
+const printServices = [
+    {
+        title: 'Visiting Cards & Corporate Stationery',
+        desc: 'Premium business cards with luxury finishes including 450+ GSM velvet touch, spot UV, embossed gold foil, letterheads, and custom folders.',
+        deliverables: ['Velvet & Matte Lamination', 'Raised Spot UV & Gold Foil', 'Executive Letterheads & Envelopes', 'Die-Cut Presentation Folders']
+    },
+    {
+        title: '3D Acrylic & LED Glow Signboards',
+        desc: 'High-visibility storefront signboards, illuminated 3D acrylic letters, ACP panel facades, and premium indoor office reception logos.',
+        deliverables: ['Backlit & Frontlit 3D Acrylic Letters', 'High-Lumen Weatherproof LEDs', 'ACP Panel Storefront Facades', 'Office Reception & Neon Displays']
+    },
+    {
+        title: 'Roll-up Standees & Large Format Banners',
+        desc: 'Vibrant event roll-up standees, heavy-duty Star flex outdoor banners, vinyl wall graphics, and custom exhibition display backdrops.',
+        deliverables: ['Aluminum Base Roll-Up Standees', 'Heavy-Duty All-Weather Flex Banners', 'Frosted Glass & Vinyl Wall Graphics', 'Custom Exhibition Backdrops']
+    },
+    {
+        title: 'Custom Product Packaging & Merch',
+        desc: 'Rigid luxury gift boxes, custom printed corrugated mailers, die-cut brand stickers, and premium corporate merchandise.',
+        deliverables: ['Rigid Magnetic Gift Boxes', 'Branded Corrugated Shipping Mailers', 'Waterproof Die-Cut Vinyl Stickers', 'Custom Apparel & Promotional Merch']
+    }
+]
 
 // Cal.com Integration
 const useCalEmbed = () => {
@@ -225,6 +251,10 @@ const faqs = [
     {
         q: 'How do we communicate during the project?',
         a: 'We create a dedicated Slack or WhatsApp channel with your team for quick daily updates, accompanied by live milestone reviews.'
+    },
+    {
+        q: 'What are your print and signboard turnaround times?',
+        a: 'Business cards and corporate stationery are dispatched within 2 to 4 business days. Custom 3D acrylic and LED glow signboards are manufactured and shipped/installed within 5 to 7 days.'
     }
 ]
 
@@ -234,6 +264,7 @@ export default function Home() {
     const [estimatorPlan, setEstimatorPlan] = useState('website')
     const [estimatorBudget, setEstimatorBudget] = useState('standard')
     const [estimatorStep, setEstimatorStep] = useState(1)
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     useCalEmbed()
 
@@ -246,53 +277,443 @@ export default function Home() {
         })
     }
 
+    const waNumber = (process.env.NEXT_PUBLIC_WA_NUMBER || process.env.WA_NUMBER || '919876543210').replace(/[^0-9]/g, '')
+    const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent("Hi Ak Prints! I'd like to discuss a project with your team.")}`
+
     return (
         <div className="min-h-screen antialiased overflow-x-hidden bg-[#fafaf9] text-[#18181b]">
 
-            {/* ── DETACHED FLOATING ROUNDED NAVBAR ── */}
-            <div className="fixed top-4 inset-x-0 z-50 px-4 sm:px-6 pointer-events-none">
-                <motion.nav
-                    initial={{ y: -50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="max-w-5xl mx-auto rounded-full bg-white/90 backdrop-blur-xl border border-zinc-200/90 shadow-md px-6 py-3 flex justify-between items-center pointer-events-auto transition-all"
+            {/* ── DETACHED FLOATING SQUIRCLE NAVBAR (Glassmorphism + Fully Responsive) ── */}
+            <div className="fixed top-4 inset-x-0 z-50 px-3 sm:px-6 pointer-events-none">
+                <nav
+                    className="max-w-6xl mx-auto rounded-[22px] bg-white/75 backdrop-blur-2xl backdrop-saturate-[190%] border border-white/85 shadow-[0_12px_40px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.04),inset_0_1px_1.5px_rgba(255,255,255,0.95)] px-4 sm:px-6 py-2.5 flex justify-between items-center pointer-events-auto transition-all duration-300"
                 >
                     {/* Brand Logo */}
-                    <a href="#" className="flex items-center gap-2.5 group">
-                        <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-extrabold text-sm shadow-xs group-hover:scale-105 transition-transform">
+                    <a href="#" className="flex items-center gap-2.5 group shrink-0">
+                        <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-extrabold text-[14px] sm:text-[15px] shadow-[0_2px_8px_rgba(37,99,235,0.35),inset_0_1px_1px_rgba(255,255,255,0.4)] group-hover:scale-105 transition-transform">
                             ak
                         </div>
-                        <span className="text-[16px] font-extrabold tracking-tight text-zinc-900">
+                        <span className="text-[17px] sm:text-[19px] font-extrabold tracking-tight text-zinc-900">
                             akprints<span className="text-blue-600">.</span>
                         </span>
                     </a>
 
-                    {/* Nav Links */}
-                    <div className="hidden md:flex items-center gap-7">
-                        {[
-                            { name: 'Services', href: '#services' },
-                            { name: 'Websites', href: '#websites' },
-                            { name: 'Why Us', href: '#comparison' },
-                            { name: 'Ads', href: '#ads' },
-                            { name: 'Work', href: '#projects' },
-                            { name: 'Team', href: '#team' },
-                            { name: 'Contact', href: '#contact' }
-                        ].map((l) => (
-                            <a
-                                key={l.name}
-                                href={l.href}
-                                className="text-base font-medium text-zinc-600 hover:text-zinc-900 transition-colors"
+                    {/* Desktop Nav Links with Simple, Clear Dropdowns */}
+                    <div className="hidden lg:flex items-center gap-1 xl:gap-1.5">
+                        {/* 1. Web Dropdown */}
+                        <div className="relative group">
+                            <button
+                                className="flex items-center gap-1 px-3 py-1.5 rounded-full text-[16px] font-semibold text-zinc-600 group-hover:text-zinc-950 transition-colors cursor-pointer"
                             >
-                                {l.name}
-                            </a>
-                        ))}
+                                <span>Web</span>
+                                <ChevronDown className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-700 transition-transform duration-200 group-hover:rotate-180" />
+                            </button>
+
+                            {/* Dropdown Menu Box */}
+                            <div className="absolute top-full left-0 pt-2.5 w-80 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ease-out z-50">
+                                <div className="p-3.5 rounded-2xl bg-white border border-zinc-200/90 shadow-[0_20px_45px_rgba(0,0,0,0.1),0_2px_6px_rgba(0,0,0,0.04)] space-y-1.5">
+                                    <a
+                                        href="#websites"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            E-commerce Stores
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Online shops with secure payments
+                                        </span>
+                                    </a>
+                                    
+                                    <a
+                                        href="#websites"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            Business Websites
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Fast, modern websites for companies
+                                        </span>
+                                    </a>
+
+                                    <a
+                                        href="#websites"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            Web Apps & Portals
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Custom portals, software & dashboards
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 2. Marketing Dropdown */}
+                        <div className="relative group">
+                            <button
+                                className="flex items-center gap-1 px-3 py-1.5 rounded-full text-[16px] font-semibold text-zinc-600 group-hover:text-zinc-950 transition-colors cursor-pointer"
+                            >
+                                <span>Marketing</span>
+                                <ChevronDown className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-700 transition-transform duration-200 group-hover:rotate-180" />
+                            </button>
+
+                            {/* Dropdown Menu Box */}
+                            <div className="absolute top-full left-0 pt-2.5 w-80 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ease-out z-50">
+                                <div className="p-3.5 rounded-2xl bg-white border border-zinc-200/90 shadow-[0_20px_45px_rgba(0,0,0,0.1),0_2px_6px_rgba(0,0,0,0.04)] space-y-1.5">
+                                    <a
+                                        href="#ads"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            Paid Ads Management
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Instagram, Google & YouTube campaigns
+                                        </span>
+                                    </a>
+
+                                    <a
+                                        href="#services"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            SEO & Google Search
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Get your website on top of search results
+                                        </span>
+                                    </a>
+
+                                    <a
+                                        href="#services"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            Sales & Growth Funnels
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Turn website visitors into paying buyers
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 3. Design Dropdown */}
+                        <div className="relative group">
+                            <button
+                                className="flex items-center gap-1 px-3 py-1.5 rounded-full text-[16px] font-semibold text-zinc-600 group-hover:text-zinc-950 transition-colors cursor-pointer"
+                            >
+                                <span>Design</span>
+                                <ChevronDown className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-700 transition-transform duration-200 group-hover:rotate-180" />
+                            </button>
+
+                            {/* Dropdown Menu Box */}
+                            <div className="absolute top-full left-0 pt-2.5 w-80 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ease-out z-50">
+                                <div className="p-3.5 rounded-2xl bg-white border border-zinc-200/90 shadow-[0_20px_45px_rgba(0,0,0,0.1),0_2px_6px_rgba(0,0,0,0.04)] space-y-1.5">
+                                    <a
+                                        href="#start-project"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            Logo & Brand Identity
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Logos, colors & full brand styleguides
+                                        </span>
+                                    </a>
+
+                                    <a
+                                        href="#start-project"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            Graphic & Ad Creatives
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Posters, social media graphics & promo banners
+                                        </span>
+                                    </a>
+
+                                    <a
+                                        href="#start-project"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            UI/UX Website Design
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Clean, simple & modern interface layouts
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 4. Print Dropdown */}
+                        <div className="relative group">
+                            <button
+                                className="flex items-center gap-1 px-3 py-1.5 rounded-full text-[16px] font-semibold text-zinc-600 group-hover:text-zinc-950 transition-colors cursor-pointer"
+                            >
+                                <span>Print</span>
+                                <ChevronDown className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-700 transition-transform duration-200 group-hover:rotate-180" />
+                            </button>
+
+                            {/* Dropdown Menu Box */}
+                            <div className="absolute top-full left-0 pt-2.5 w-80 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-200 ease-out z-50">
+                                <div className="p-3.5 rounded-2xl bg-white border border-zinc-200/90 shadow-[0_20px_45px_rgba(0,0,0,0.1),0_2px_6px_rgba(0,0,0,0.04)] space-y-1.5">
+                                    <a
+                                        href="#printing"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            Visiting Cards & Stationery
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Luxury cards, letterheads & envelopes
+                                        </span>
+                                    </a>
+
+                                    <a
+                                        href="#printing"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            Shop Signboards & 3D Letters
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            LED glow boards & office reception signs
+                                        </span>
+                                    </a>
+
+                                    <a
+                                        href="#printing"
+                                        className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
+                                    >
+                                        <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
+                                            Banners, Standees & Packaging
+                                        </span>
+                                        <span className="text-[14px] text-zinc-600 block mt-1">
+                                            Event standees, vinyl decals & custom boxes
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 5. Direct Link: Results */}
+                        <a
+                            href="#projects"
+                            className="px-3 py-1.5 rounded-full text-[16px] font-semibold text-zinc-600 hover:text-zinc-950 transition-colors"
+                        >
+                            Results
+                        </a>
                     </div>
 
-                    {/* Action Button */}
-                    <a href="#contact">
-                        <MagneticButtonDemo text="Book a Call" />
-                    </a>
-                </motion.nav>
+                    {/* Right: Desktop Action Button & Mobile Controls */}
+                    <div className="flex items-center gap-2">
+                        <div className="hidden sm:block">
+                            <a href={waLink} target="_blank" rel="noopener noreferrer">
+                                <MagneticButtonDemo text="WhatsApp" variant="whatsapp" />
+                            </a>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 sm:hidden">
+                            <a
+                                href={waLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs inline-flex items-center gap-1 transition-colors"
+                            >
+                                <IconBrandWhatsapp className="w-3.5 h-3.5" />
+                                <span>WhatsApp</span>
+                            </a>
+                        </div>
+
+                        {/* Mobile Hamburger Toggle Button (Animated MorphIcon) */}
+                        <button
+                            onClick={() => setMobileMenuOpen(o => !o)}
+                            className="lg:hidden w-9 h-9 rounded-full bg-white/90 border border-zinc-200/90 flex items-center justify-center text-zinc-800 hover:text-zinc-950 transition-colors cursor-pointer shadow-xs"
+                            aria-label="Toggle Mobile Navigation"
+                            aria-expanded={mobileMenuOpen}
+                        >
+                            <MorphIcon
+                                icon={mobileMenuOpen ? LucideX : LucideMenu}
+                                size={18}
+                                strokeWidth={2.2}
+                                className="text-zinc-800"
+                            />
+                        </button>
+                    </div>
+                </nav>
+
+                {/* Mobile Dropdown Panel */}
+                <AnimatePresence>
+                    {mobileMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                            className="max-w-5xl mx-auto mt-2 rounded-[22px] bg-white border border-zinc-200/90 shadow-[0_20px_50px_rgba(0,0,0,0.15)] p-5 sm:p-6 pointer-events-auto lg:hidden overflow-hidden max-h-[82vh] overflow-y-auto"
+                        >
+                            <div className="space-y-4">
+                                {/* 1. Web Group */}
+                                <div>
+                                    <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block px-2 mb-1.5">
+                                        Web
+                                    </span>
+                                    <div className="space-y-1">
+                                        <a
+                                            href="#websites"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Business Websites</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Fast, modern websites for companies</span>
+                                        </a>
+                                        <a
+                                            href="#websites"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Online Stores</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">E-commerce shops with online checkout</span>
+                                        </a>
+                                        <a
+                                            href="#websites"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Web Apps & Portals</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Custom portals, software & dashboards</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* 2. Marketing Group */}
+                                <div className="pt-2 border-t border-zinc-100">
+                                    <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block px-2 mb-1.5">
+                                        Marketing
+                                    </span>
+                                    <div className="space-y-1">
+                                        <a
+                                            href="#ads"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Paid Ads Management</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Instagram, Google & YouTube campaigns</span>
+                                        </a>
+                                        <a
+                                            href="#services"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">SEO & Google Search</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Get on top of Google search results</span>
+                                        </a>
+                                        <a
+                                            href="#services"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Sales & Growth Funnels</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Turn visitors into paying buyers</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* 3. Design Group */}
+                                <div className="pt-2 border-t border-zinc-100">
+                                    <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block px-2 mb-1.5">
+                                        Design
+                                    </span>
+                                    <div className="space-y-1">
+                                        <a
+                                            href="#start-project"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Logo & Brand Identity</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Logos, color palettes & styleguides</span>
+                                        </a>
+                                        <a
+                                            href="#start-project"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Graphic & Ad Creatives</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Posters, social creatives & banners</span>
+                                        </a>
+                                        <a
+                                            href="#start-project"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">UI/UX Website Design</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Clean, simple & modern UI layouts</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* 4. Print Group */}
+                                <div className="pt-2 border-t border-zinc-100">
+                                    <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block px-2 mb-1.5">
+                                        Print
+                                    </span>
+                                    <div className="space-y-1">
+                                        <a
+                                            href="#printing"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Visiting Cards & Stationery</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Luxury cards, letterheads & envelopes</span>
+                                        </a>
+                                        <a
+                                            href="#printing"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Shop Signboards & 3D Letters</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">LED glow signs & office reception signs</span>
+                                        </a>
+                                        <a
+                                            href="#printing"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+                                        >
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Banners, Standees & Packaging</span>
+                                            <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">Event standees, decals & custom boxes</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Direct Action Links */}
+                                <div className="pt-2 border-t border-zinc-100 grid grid-cols-2 gap-2.5">
+                                    <a
+                                        href="#projects"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="p-3 rounded-xl bg-zinc-50 hover:bg-zinc-100 transition-colors text-center text-[15px] font-bold text-zinc-800"
+                                    >
+                                        Results
+                                    </a>
+                                    <a
+                                        href="#contact"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="p-3 rounded-xl bg-blue-50 hover:bg-blue-100 transition-colors text-center text-[15px] font-bold text-blue-700"
+                                    >
+                                        Book a Call
+                                    </a>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
             {/* ── HERO SECTION ── */}
@@ -308,7 +729,7 @@ export default function Home() {
                     <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-16">
                         <div className="max-w-lg">
                             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-[1.15]">
-                                Everything your business needs <span className="font-serif italic font-normal text-blue-600">to grow online.</span>
+                                Everything your business needs <span className="font-serif font-normal text-blue-600">to grow online.</span>
                             </h2>
                         </div>
                         <div className="max-w-md lg:pt-2">
@@ -475,7 +896,7 @@ export default function Home() {
                 <div className="relative z-10 max-w-6xl mx-auto">
                     <div className="text-center max-w-3xl mx-auto mb-16">
                         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
-                            Tell us what you need. <span className="font-serif italic font-normal text-blue-600">We will build it.</span>
+                            Tell us what you need. <span className="font-serif font-normal text-blue-600">We will build it.</span>
                         </h2>
                         <p className="mt-5 text-lg sm:text-[20px] text-zinc-600 leading-relaxed font-normal">
                             From global high-volume e-commerce flagships to complex cloud SaaS portals, we build digital infrastructure tailored to your exact business requirements.
@@ -524,7 +945,7 @@ export default function Home() {
                             akprints vs Others
                         </div>
                         <h2 className="text-3xl sm:text-5xl font-medium tracking-tight text-zinc-900 leading-tight">
-                            Why akprints Beats <AuroraText className="font-serif italic font-normal">Every Competitor</AuroraText>
+                            Why akprints Beats <AuroraText className="font-serif font-normal">Every Competitor</AuroraText>
                         </h2>
                         <p className="text-lg text-zinc-600 mt-4 leading-relaxed">
                             Direct senior engineer craft with zero agency fluff, built for brands that want results.
@@ -582,7 +1003,7 @@ export default function Home() {
                     {/* Header */}
                     <div className="max-w-3xl mb-16">
                         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-[1.15]">
-                            We put your brand in front <span className="font-serif italic font-normal text-blue-600">of the right people</span>.
+                            We put your brand in front <span className="font-serif font-normal text-blue-600">of the right people</span>.
                         </h2>
                         <p className="mt-4 text-[16px] text-zinc-600 leading-relaxed">
                             We write, design, and run targeted ad campaigns on Instagram, YouTube, and Google Search so your business reaches customers ready to buy.
@@ -684,7 +1105,56 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ── SECTION 5: PROJECTS WE HAVE DELIVERED (Restored & Clean) ── */}
+            {/* ── SECTION 5: PHYSICAL PRINT & SIGNAGE SOLUTIONS (akprints Core Print Infrastructure) ── */}
+            <section id="printing" className="py-24 sm:py-32 px-6 bg-[#f4f4f2]/70 border-y border-zinc-200/80 relative">
+                <BackgroundRippleEffect />
+                <div className="relative z-10 max-w-6xl mx-auto">
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200/60 text-xs font-bold text-blue-700 uppercase tracking-wider mb-4">
+                            Physical Print & Signage
+                        </div>
+                        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
+                            Physical print and signage. <span className="font-serif font-normal text-blue-600">Built to make an impression.</span>
+                        </h2>
+                        <p className="mt-5 text-lg sm:text-[20px] text-zinc-600 leading-relaxed font-normal">
+                            From luxury velvet visiting cards to illuminated 3D LED storefront signboards, akprints manufactures and delivers premium physical branding collateral with precision.
+                        </p>
+                    </div>
+
+                    {/* 4 Clean Physical Print Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                        {printServices.map((service, idx) => (
+                            <motion.div
+                                key={service.title}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                variants={fadeIn}
+                                custom={idx * 0.08}
+                                className="group relative rounded-3xl bg-white border border-zinc-200/90 p-8 sm:p-10 flex flex-col justify-start hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                            >
+                                <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 tracking-tight group-hover:text-blue-600 transition-colors">
+                                    {service.title}
+                                </h3>
+                                <p className="text-base sm:text-lg text-zinc-600 leading-relaxed mt-4">
+                                    {service.desc}
+                                </p>
+
+                                <div className="mt-6 pt-5 border-t border-zinc-100 space-y-2.5">
+                                    {service.deliverables.map((item, dIdx) => (
+                                        <div key={dIdx} className="flex items-center gap-3 text-sm font-medium text-zinc-600">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                                            <span>{item}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ── SECTION 6: PROJECTS WE HAVE DELIVERED (Restored & Clean) ── */}
             <section id="projects" className="py-24 sm:py-32 px-6 bg-white">
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center max-w-2xl mx-auto mb-16">
@@ -794,7 +1264,7 @@ export default function Home() {
                     <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-14">
                         <div className="max-w-xl">
                             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight mb-3">
-                                A team of specialists <span className="font-serif italic font-normal text-blue-600">behind every project</span>.
+                                A team of specialists <span className="font-serif font-normal text-blue-600">behind every project</span>.
                             </h2>
                             <p className="text-[16px] text-zinc-600 leading-relaxed">
                                 You don't just get one developer. You get a full team of experts working together to deliver the best possible result.
@@ -842,7 +1312,7 @@ export default function Home() {
                             Start a Project
                         </span>
                         <h2 className="text-3xl sm:text-5xl font-normal tracking-tight text-zinc-900 leading-tight">
-                            What do you need? <span className="font-serif italic text-blue-600">Let us build it</span>.
+                            What do you need? <span className="font-serif font-normal text-blue-600">Let us build it</span>.
                         </h2>
                         <p className="text-[16px] text-zinc-600 mt-3">
                             Select your requirements below and schedule a quick call to get a clear scope and timeline.
@@ -862,7 +1332,8 @@ export default function Home() {
                                         { id: 'website', icon: Palette, title: 'A New Website', desc: 'Modern, fast website designed to showcase your brand or company.' },
                                         { id: 'ecommerce', icon: ShoppingBag, title: 'Online Store or Web App', desc: 'Full e-commerce setup with online payments and order management.' },
                                         { id: 'ads', icon: Rocket, title: 'Paid Ads Management', desc: 'Targeted ad campaigns on Instagram, YouTube, and Google.' },
-                                        { id: 'growth', icon: TrendingUp, title: 'Complete Growth Package', desc: 'Custom website development combined with monthly ad management.' }
+                                        { id: 'printing', icon: Printer, title: 'Print & Signage', desc: 'Luxury visiting cards, 3D LED glow signboards, acrylic displays, packaging & banners.' },
+                                        { id: 'growth', icon: TrendingUp, title: 'Complete Growth & Brand Package', desc: 'Custom website, high-ROAS ads management & physical print branding.' }
                                     ].map(item => {
                                         const Icon = item.icon
                                         const isSelected = estimatorPlan === item.id
@@ -999,7 +1470,7 @@ export default function Home() {
                     </span>
 
                     <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-tight">
-                        Ready to grow? <span className="font-serif italic font-normal text-blue-600">Let us talk.</span>
+                        Ready to grow? <span className="font-serif font-normal text-blue-600">Let us talk.</span>
                     </h2>
 
                     <p className="text-[16px] text-zinc-600 max-w-lg mx-auto leading-relaxed">
