@@ -6,7 +6,9 @@ import { motion } from "motion/react";
 export const MagneticButton = ({
   children,
   strength = 0.8,
-  maxDistance = 100
+  maxDistance = 100,
+  showColor = "var(--color-blue-500)",
+  className = ""
 }) => {
   const ref = useRef(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -39,11 +41,11 @@ export const MagneticButton = ({
     <div
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="cursor-pointer rounded-lg border border-dashed transition-colors duration-150 [--show-color:var(--color-blue-500)]"
+      className={`cursor-pointer rounded-lg border border-dashed transition-colors duration-150 ${className}`}
       style={{
-        borderColor: hasMoved ? "var(--show-color)" : "transparent",
+        borderColor: hasMoved ? showColor : "transparent",
         backgroundColor: hasMoved
-          ? "color-mix(in srgb,var(--show-color) 20%, transparent)"
+          ? `color-mix(in srgb, ${showColor} 15%, transparent)`
           : "transparent",
       }}>
       <motion.div

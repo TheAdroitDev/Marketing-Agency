@@ -122,10 +122,14 @@ export const Cover = ({
           },
         }}
         className={cn(
-          "dark:text-white inline-block text-[#5c52ff] relative z-20 group-hover/cover:text-white transition duration-200",
+          "inline-block text-[#2563eb] text-blue-600 relative z-20 group-hover/cover:text-white transition duration-200",
           className
         )}>
-        {children}
+        {typeof children === "function"
+          ? children(hovered)
+          : React.isValidElement(children)
+          ? React.cloneElement(children, { isHovered: hovered, hovered })
+          : children}
       </motion.span>
       <CircleIcon className="absolute -right-[2px] -top-[2px]" />
       <CircleIcon className="absolute -bottom-[2px] -right-[2px]" delay={0.4} />
