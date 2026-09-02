@@ -68,8 +68,7 @@ export default function AuroraBackgroundDemo() {
           >
             <div className="flex flex-col items-start gap-6 max-w-xl">
               <p className="text-lg sm:text-[21px] leading-[1.65] text-zinc-900 font-normal">
-                We build websites and digitally market across Google, Youtube & Meta
-                and help your brand grow online.
+                We design, build websites, run ads across Google & Meta, and print everything your brand needs to grow.
               </p>
               <div>
                 <a href="#contact">
