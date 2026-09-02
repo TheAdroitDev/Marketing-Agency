@@ -266,6 +266,17 @@ export default function Home() {
     const [estimatorStep, setEstimatorStep] = useState(1)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+    const [scrolled, setScrolled] = useState(false)
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20)
+        }
+        handleScroll()
+        window.addEventListener('scroll', handleScroll, { passive: true })
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+
     useCalEmbed()
 
     const fadeIn = {
@@ -286,16 +297,22 @@ export default function Home() {
             {/* ── DETACHED FLOATING SQUIRCLE NAVBAR (Glassmorphism + Fully Responsive) ── */}
             <div className="fixed top-4 inset-x-0 z-50 px-3 sm:px-6 pointer-events-none">
                 <nav
-                    className="max-w-6xl mx-auto rounded-[22px] bg-white/75 backdrop-blur-2xl backdrop-saturate-[190%] border border-white/85 shadow-[0_12px_40px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.04),inset_0_1px_1.5px_rgba(255,255,255,0.95)] px-4 sm:px-6 py-2.5 flex justify-between items-center pointer-events-auto transition-all duration-300"
+                    className={`max-w-6xl mx-auto rounded-[22px] px-4 sm:px-6 py-2.5 flex justify-between items-center pointer-events-auto transition-all duration-300 ease-out border ${
+                        scrolled || mobileMenuOpen
+                            ? 'bg-white/75 backdrop-blur-2xl backdrop-saturate-[190%] border-white/85 shadow-[0_12px_40px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.04),inset_0_1px_1.5px_rgba(255,255,255,0.95)]'
+                            : 'bg-transparent border-transparent shadow-none backdrop-blur-none hover:bg-white/75 hover:backdrop-blur-2xl hover:backdrop-saturate-[190%] hover:border-white/85 hover:shadow-[0_12px_40px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.04),inset_0_1px_1.5px_rgba(255,255,255,0.95)]'
+                    }`}
                 >
                     {/* Brand Logo */}
-                    <a href="#" className="flex items-center gap-2.5 group shrink-0">
-                        <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-extrabold text-[14px] sm:text-[15px] shadow-[0_2px_8px_rgba(37,99,235,0.35),inset_0_1px_1px_rgba(255,255,255,0.4)] group-hover:scale-105 transition-transform">
-                            ak
-                        </div>
-                        <span className="text-[17px] sm:text-[19px] font-extrabold tracking-tight text-zinc-900">
-                            akprints<span className="text-blue-600">.</span>
-                        </span>
+                    <a href="#" className="flex items-center group shrink-0">
+                        <Image
+                            src="/ak-logo-2.png"
+                            alt="AK Prints"
+                            width={130}
+                            height={36}
+                            priority
+                            className="h-8 sm:h-9 w-auto object-contain group-hover:scale-105 transition-transform"
+                        />
                     </a>
 
                     {/* Desktop Nav Links with Simple, Clear Dropdowns */}
