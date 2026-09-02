@@ -482,7 +482,7 @@ export default function Home() {
                                         className="block px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors group/item"
                                     >
                                         <span className="text-[15px] font-bold text-zinc-900 block leading-tight group-hover/item:text-blue-600 transition-colors">
-                                            Shop Signboards & 3D Letters
+                                            Shop Signboards 
                                         </span>
                                         <span className="text-[14px] text-zinc-600 block mt-1">
                                             LED glow boards & office reception signs
@@ -679,7 +679,7 @@ export default function Home() {
                                             onClick={() => setMobileMenuOpen(false)}
                                             className="block px-3.5 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
                                         >
-                                            <span className="text-[15px] font-bold text-zinc-800 block">Shop Signboards & 3D Letters</span>
+                                            <span className="text-[15px] font-bold text-zinc-800 block">Shop Signboards</span>
                                             <span className="text-[14px] text-zinc-600 block font-normal mt-0.5">LED glow signs & office reception signs</span>
                                         </a>
                                         <a
