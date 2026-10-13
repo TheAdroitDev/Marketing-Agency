@@ -20,6 +20,8 @@ import MagneticButtonDemo from '@/components/magnetic-button-demo'
 import { BackgroundRippleEffect } from '@/components/ui/background-ripple-effect'
 import SocialProof01 from '@/components/social-proof-01'
 import { AuroraText } from '@/components/ui/aurora-text'
+import AkprintsVsOthers from '@/components/akprints-vs-others'
+import EverythingYourBusinessNeeds from '@/components/everything-your-business-needs'
 
 const printServices = [
     {
@@ -739,173 +741,8 @@ export default function Home() {
             {/* ── SOCIAL PROOF LOGO CAROUSEL COMPONENT (@ncdai/social-proof-01) ── */}
             <SocialProof01 />
 
-            {/* ── SECTION 1: EVERYTHING YOUR BUSINESS NEEDS TO GROW ONLINE (Image 1 Style) ── */}
-            <section id="services" className="py-24 sm:py-32 px-6">
-                <div className="max-w-6xl mx-auto">
-                    {/* Header with Heading Left + Description Right (Inspired by Image 1) */}
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-16">
-                        <div className="max-w-lg">
-                            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 leading-[1.15]">
-                                Everything your business needs <span className="font-serif font-normal text-blue-600">to grow online.</span>
-                            </h2>
-                        </div>
-                        <div className="max-w-md lg:pt-2">
-                            <p className="text-[16px] sm:text-[17px] text-zinc-600 leading-relaxed">
-                                We partner with founders and marketing teams to engineer fast websites, high-converting stores, and profitable ad campaigns with total transparency.
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* 3 Soothing Clean Cards (Image 1 reference layout) */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-                        {/* Card 1: Websites & Online Stores */}
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            variants={fadeIn}
-                            custom={0.1}
-                            className="group rounded-3xl bg-[#fbfbfa] border border-zinc-200/80 p-7 flex flex-col justify-between hover:shadow-lg hover:border-zinc-300 transition-all duration-300 min-h-[380px]"
-                        >
-                            {/* Visual UI Box */}
-                            <div className="w-full h-44 rounded-2xl bg-white border border-zinc-200/60 p-4 flex flex-col justify-between shadow-xs relative overflow-hidden group-hover:scale-[1.02] transition-transform">
-                                <div className="flex items-center justify-between text-xs border-b border-zinc-100 pb-2.5">
-                                    <div className="flex items-center gap-1.5 font-bold text-zinc-800">
-                                        <Code2 className="w-3.5 h-3.5 text-blue-600" />
-                                        <span>Storefront Engine</span>
-                                    </div>
-                                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">85ms Edge</span>
-                                </div>
-                                <div className="space-y-2 py-2">
-                                    <div className="flex items-center justify-between text-xs p-2 rounded-lg bg-zinc-50 border border-zinc-100">
-                                        <span className="font-medium text-zinc-700">One-Click Checkout</span>
-                                        <span className="text-[11px] text-zinc-500 font-bold">Razorpay / Stripe</span>
-                                    </div>
-                                    <div className="flex items-center justify-between text-xs p-2 rounded-lg bg-zinc-50 border border-zinc-100">
-                                        <span className="font-medium text-zinc-700">Mobile Speed</span>
-                                        <span className="text-[11px] text-emerald-600 font-bold">100/100 Core Vitals</span>
-                                    </div>
-                                </div>
-                                <div className="flex gap-2">
-                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">Next.js 16</span>
-                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">Shopify</span>
-                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">Tailwind</span>
-                                </div>
-                            </div>
-
-                            {/* Card Info Bottom */}
-                            <div className="mt-6 flex items-center justify-between pt-2">
-                                <div>
-                                    <h3 className="text-xl font-bold text-zinc-900 tracking-tight pr-4">
-                                        Websites & Online Stores
-                                    </h3>
-                                </div>
-                                <div className="w-8 h-8 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-zinc-700 shrink-0 ml-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                    <Plus className="w-4 h-4" />
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Card 2: Performance Ads */}
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            variants={fadeIn}
-                            custom={0.2}
-                            className="group rounded-3xl bg-[#fbfbfa] border border-zinc-200/80 p-7 flex flex-col justify-between hover:shadow-lg hover:border-zinc-300 transition-all duration-300 min-h-[380px]"
-                        >
-                            {/* Visual UI Box */}
-                            <div className="w-full h-44 rounded-2xl bg-white border border-zinc-200/60 p-4 flex flex-col justify-between shadow-xs relative overflow-hidden group-hover:scale-[1.02] transition-transform">
-                                <div className="flex items-center justify-between text-xs border-b border-zinc-100 pb-2.5">
-                                    <div className="flex items-center gap-1.5 font-bold text-zinc-800">
-                                        <Target className="w-3.5 h-3.5 text-blue-600" />
-                                        <span>Campaign Planner</span>
-                                    </div>
-                                    <span className="text-[11px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">ROAS: 5.8x</span>
-                                </div>
-                                <div className="space-y-2 py-2">
-                                    <div className="flex items-center gap-2 text-xs text-zinc-700">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                        <span>Instagram Reels & Video Creatives</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-xs text-zinc-700">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                        <span>Google Search Exact-Match Intent</span>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-xs text-zinc-700">
-                                        <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                                        <span>YouTube In-Stream Video Ads</span>
-                                    </div>
-                                </div>
-                                <div className="flex gap-2">
-                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700">Meta CAPI</span>
-                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700">Google Ads</span>
-                                </div>
-                            </div>
-
-                            {/* Card Info Bottom */}
-                            <div className="mt-6 flex items-center justify-between pt-2">
-                                <div>
-                                    <h3 className="text-xl font-bold text-zinc-900 tracking-tight pr-4">
-                                        Targeted Ad Campaigns
-                                    </h3>
-                                </div>
-                                <div className="w-8 h-8 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-zinc-700 shrink-0 ml-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                    <Plus className="w-4 h-4" />
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Card 3: SEO & Conversion Optimization */}
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            variants={fadeIn}
-                            custom={0.3}
-                            className="group rounded-3xl bg-[#fbfbfa] border border-zinc-200/80 p-7 flex flex-col justify-between hover:shadow-lg hover:border-zinc-300 transition-all duration-300 min-h-[380px]"
-                        >
-                            {/* Visual UI Box */}
-                            <div className="w-full h-44 rounded-2xl bg-white border border-zinc-200/60 p-4 flex flex-col justify-between shadow-xs relative overflow-hidden group-hover:scale-[1.02] transition-transform">
-                                <div className="flex items-center justify-between text-xs border-b border-zinc-100 pb-2.5">
-                                    <div className="flex items-center gap-1.5 font-bold text-zinc-800">
-                                        <Shield className="w-3.5 h-3.5 text-emerald-600" />
-                                        <span>Growth & SEO Engine</span>
-                                    </div>
-                                    <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Page 1 Rank</span>
-                                </div>
-                                <div className="space-y-2 py-2">
-                                    <div className="flex items-center justify-between text-xs p-2 rounded-lg bg-zinc-50 border border-zinc-100">
-                                        <span className="font-medium text-zinc-700">Conversion Rate</span>
-                                        <span className="text-[11px] text-emerald-600 font-bold">+38% Lift</span>
-                                    </div>
-                                    <div className="flex items-center justify-between text-xs p-2 rounded-lg bg-zinc-50 border border-zinc-100">
-                                        <span className="font-medium text-zinc-700">Search Keywords</span>
-                                        <span className="text-[11px] text-blue-600 font-bold">Top Positions</span>
-                                    </div>
-                                </div>
-                                <div className="flex gap-2">
-                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">Schema SEO</span>
-                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600">CRO Funnels</span>
-                                </div>
-                            </div>
-
-                            {/* Card Info Bottom */}
-                            <div className="mt-6 flex items-center justify-between pt-2">
-                                <div>
-                                    <h3 className="text-xl font-bold text-zinc-900 tracking-tight pr-4">
-                                        Conversion & SEO Growth
-                                    </h3>
-                                </div>
-                                <div className="w-8 h-8 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-zinc-700 shrink-0 ml-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                    <Plus className="w-4 h-4" />
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
+            {/* ── SECTION 1: EVERYTHING YOUR BUSINESS NEEDS TO GROW ONLINE ── */}
+            <EverythingYourBusinessNeeds />
 
             {/* ── SECTION 2: WEBSITES WE BUILD ── */}
             <section id="websites" className="py-24 sm:py-32 px-6 bg-[#f4f4f2]/70 border-y border-zinc-200/80 relative">
@@ -953,66 +790,8 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ── SECTION 3: COMPARISON (Image 2 Style - akprints vs Others) ── */}
-            <section id="comparison" className="py-24 sm:py-32 px-6 bg-white">
-                <div className="max-w-5xl mx-auto">
-                    {/* Header */}
-                    <div className="text-center max-w-2xl mx-auto mb-16">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-xs font-bold text-zinc-700 uppercase tracking-wider mb-4">
-                            akprints vs Others
-                        </div>
-                        <h2 className="text-3xl sm:text-5xl font-medium tracking-tight text-zinc-900 leading-tight">
-                            Why akprints Beats <AuroraText className="font-serif font-normal">Every Competitor</AuroraText>
-                        </h2>
-                        <p className="text-lg text-zinc-600 mt-4 leading-relaxed">
-                            Direct senior engineer craft with zero agency fluff, built for brands that want results.
-                        </p>
-                    </div>
-
-                    {/* Comparison Table Card (Image 2 style) */}
-                    <div className="rounded-3xl border border-zinc-200/90 bg-white shadow-xl overflow-hidden">
-                        {/* Table Header */}
-                        <div className="grid grid-cols-12 border-b border-zinc-200/80 bg-zinc-50/70 text-sm font-bold uppercase tracking-wider text-zinc-500">
-                            <div className="col-span-6 p-5 sm:p-6 text-zinc-800">Features & Standards</div>
-                            <div className="col-span-3 p-5 sm:p-6 text-center border-x border-zinc-200/80">Traditional Agencies</div>
-                            <div className="col-span-3 p-5 sm:p-6 text-center bg-blue-600 text-white font-extrabold">akprints</div>
-                        </div>
-
-                        {/* Rows */}
-                        <div className="divide-y divide-zinc-100">
-                            {comparisonFeatures.map((row, i) => (
-                                <div key={i} className="grid grid-cols-12 items-center hover:bg-zinc-50/50 transition-colors">
-                                    <div className="col-span-6 p-4 sm:p-5 text-base sm:text-lg font-semibold text-zinc-800 flex items-center gap-3">
-                                        <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 hidden sm:block" />
-                                        <span>{row.name}</span>
-                                    </div>
-                                    <div className="col-span-3 p-4 sm:p-5 text-center border-x border-zinc-100">
-                                        {row.others ? (
-                                            <Check className="w-5 h-5 text-zinc-500 mx-auto" />
-                                        ) : (
-                                            <X className="w-5 h-5 text-zinc-300 mx-auto" />
-                                        )}
-                                    </div>
-                                    <div className="col-span-3 p-4 sm:p-5 text-center bg-blue-50/40">
-                                        <div className="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center mx-auto shadow-xs">
-                                            <Check className="w-3.5 h-3.5 stroke-[3]" />
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Feature Badges Cloud (Image 2 style) */}
-                    <div className="flex flex-wrap items-center justify-center gap-2.5 mt-10">
-                        {comparisonPills.map((pill, i) => (
-                            <span key={i} className="px-4 py-2 rounded-full bg-zinc-100/90 border border-zinc-200 text-xs font-semibold text-zinc-700">
-                                {pill}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            {/* ── SECTION 3: COMPARISON (Ak Prints VS Traditional Service Providers) ── */}
+            <AkprintsVsOthers />
 
             {/* ── SECTION 4: WE RUN YOUR ADS (Image 3 Style) ── */}
             <section id="ads" className="py-24 sm:py-32 px-6 bg-[#f4f4f2]/70 border-y border-zinc-200/80">
