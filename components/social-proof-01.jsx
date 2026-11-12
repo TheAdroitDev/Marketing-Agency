@@ -5,7 +5,7 @@ import Image from "next/image"
 
 export default function SocialProof01() {
   return (
-    <div className="w-full overflow-hidden py-10 sm:py-14 bg-[#fafaf9]">
+    <div className="w-full overflow-hidden pt-10 sm:pt-14 pb-12 sm:pb-16 bg-[#fafaf9]">
       <div className="max-w-5xl mx-auto px-6">
         <h2 className="text-center text-lg sm:text-xl md:text-[22px] font-medium text-zinc-800 mb-8 sm:mb-10 tracking-tight">
           Trusted by high-growth brands and modern businesses
