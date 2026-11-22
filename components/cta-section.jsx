@@ -1,7 +1,9 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import MagneticButtonDemo from '@/components/magnetic-button-demo'
+import { site } from '@/lib/site'
 
 const Globe3D = dynamic(() => import('@/components/ui/3d-globe').then(m => m.Globe3D), {
     ssr: false,
@@ -25,9 +27,64 @@ const markers = [
     { lat: 37.5665, lng: 126.978, src: 'https://assets.aceternity.com/avatars/13.webp', label: 'Seoul' },
 ]
 
+// Cal.com embed loader. Runs once, and only when the CTA is about to be seen,
+// so the third-party script never competes with the first paint.
+let calLoaded = false
+function loadCal() {
+    if (calLoaded || typeof window === 'undefined') return
+    calLoaded = true
+    ;(function (C, A, L) {
+        let p = function (a, ar) { a.q.push(ar) }
+        let d = C.document
+        C.Cal = C.Cal || function () {
+            let cal = C.Cal
+            let ar = arguments
+            if (!cal.loaded) {
+                cal.ns = {}
+                cal.q = cal.q || []
+                d.head.appendChild(d.createElement('script')).src = A
+                cal.loaded = true
+            }
+            if (ar[0] === L) {
+                let api = function () { p(api, arguments) }
+                let namespace = ar[1]
+                api.q = api.q || []
+                typeof namespace === 'string' ? (cal.ns[namespace] = api) && p(api, ar) : p(cal, ar)
+                return
+            }
+            p(cal, ar)
+        }
+    })(window, 'https://app.cal.com/embed/embed.js', 'init')
+
+    window.Cal('init', { origin: 'https://cal.com' })
+    window.Cal('ui', { styles: { branding: { brandColor: '#2563eb' } }, hideEventTypeDetails: false, layout: 'month_view' })
+}
+
 export default function CtaSection() {
+    const sectionRef = useRef(null)
+
+    useEffect(() => {
+        const node = sectionRef.current
+        if (!node) return
+        if (!('IntersectionObserver' in window)) {
+            loadCal()
+            return
+        }
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries.some((e) => e.isIntersecting)) {
+                    loadCal()
+                    observer.disconnect()
+                }
+            },
+            { rootMargin: '600px 0px' }
+        )
+        observer.observe(node)
+        return () => observer.disconnect()
+    }, [])
+
     return (
-        <section id="contact" className="py-12 sm:py-16 bg-white">
+        <section id="contact" ref={sectionRef} className="py-12 sm:py-16 bg-white">
             <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[28px] sm:rounded-[36px] bg-[#fafaf9] min-h-[400px] sm:min-h-[440px]">
                 {/* Left content */}
                 <div className="relative z-20 p-6 sm:p-10 lg:p-14 max-w-lg space-y-5 sm:space-y-6">
@@ -36,18 +93,32 @@ export default function CtaSection() {
                     </h2>
 
                     <p className="text-sm sm:text-base text-zinc-600 leading-relaxed max-w-sm">
-                        Book a free 30-minute call. Tell us what you need and we'll figure out the best way to make it happen.
+                        Book a free 30-minute call. Tell us what you need and we&apos;ll figure out the best way to make it happen.
                     </p>
 
                     <div className="pt-1">
-                        <div data-cal-link="shivam-verma-i3fold/30min" className="inline-block cursor-pointer">
+                        <div
+                            role="button"
+                            tabIndex={0}
+                            data-cal-link={site.calLink}
+                            onPointerEnter={loadCal}
+                            onFocus={loadCal}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault()
+                                    e.currentTarget.click()
+                                }
+                            }}
+                            className="inline-block cursor-pointer rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600/40"
+                            aria-label="Book a free 30-minute call with AK Prints"
+                        >
                             <MagneticButtonDemo text="Book a Free Call" variant="blue" />
                         </div>
                     </div>
                 </div>
 
                 {/* Globe — bottom-right corner, half visible, markers clickable and hoverable */}
-                <div className="absolute -right-72 -bottom-96 z-10 w-[640px] h-[640px] md:-bottom-80 md:w-[720px] md:h-[720px]">
+                <div aria-hidden="true" className="absolute -right-72 -bottom-96 z-10 w-[640px] h-[640px] md:-bottom-80 md:w-[720px] md:h-[720px]">
                     <Globe3D
                         className="h-full w-full"
                         markers={markers}
@@ -57,14 +128,6 @@ export default function CtaSection() {
                             showAtmosphere: false,
                             enableZoom: false,
                             enablePan: false,
-                        }}
-                        onMarkerClick={(marker) => {
-                            console.log('Clicked marker:', marker.label)
-                        }}
-                        onMarkerHover={(marker) => {
-                            if (marker) {
-                                console.log('Hovering:', marker.label)
-                            }
                         }}
                     />
                 </div>
