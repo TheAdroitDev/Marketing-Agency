@@ -197,8 +197,6 @@ export default function AkprintsVsOthers() {
                       alt="Ak Prints"
                       width={140}
                       height={46}
-                      priority
-                      quality={100}
                       className="h-7 sm:h-8 w-auto object-contain"
                     />
                   </div>
