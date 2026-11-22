@@ -70,6 +70,13 @@ function Answer({
   avatar
 }) {
   return (
+    <>
+    {/* Closed answers stay in the HTML (hidden) so crawlers and AI assistants can read them. */}
+    {!open && (
+      <div hidden data-slot="faq-answer-text">
+        {item.answer}
+      </div>
+    )}
     <AnimatePresence mode="popLayout" initial={false}>
       {open && (
         <motion.div
@@ -107,6 +114,7 @@ function Answer({
         </motion.div>
       )}
     </AnimatePresence>
+    </>
   );
 }
 
