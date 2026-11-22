@@ -9,14 +9,14 @@ import MagneticButtonDemo from "./magnetic-button-demo";
 export default function AuroraBackgroundDemo() {
   return (
     <div className="relative min-h-[100svh] w-full flex items-center justify-center overflow-hidden pt-28 pb-24 sm:pt-36 sm:pb-32">
-      {/* ── BACKGROUND CLOUD IMAGE LAYER ── */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+      {/* ── BACKGROUND CLOUD IMAGE LAYER (decorative) ── */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none" aria-hidden="true">
         <Image
           src="/images/thumbnail-4.png"
-          alt="Cloudscape sky background"
+          alt=""
           fill
           priority
-          quality={100}
+          sizes="100vw"
           className="object-cover object-center md:object-[75%_35%]"
         />
 
@@ -32,12 +32,20 @@ export default function AuroraBackgroundDemo() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col"
         >
-          {/* Main Headline */}
+          {/* Main Headline: one <h1> for the whole statement, led by the keyword line */}
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10 lg:gap-16">
-            <div className="space-y-1 flex-1">
+            <h1 className="space-y-1 flex-1">
+              <span className="block pb-4 sm:pb-5">
+                <span className="inline-flex items-center p-[2px] rounded-[10px] bg-white/60 backdrop-blur-md">
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-[8px] border border-white text-[13px] sm:text-sm font-medium tracking-normal text-zinc-800">
+                    <span className="h-1.5 w-1.5 rounded-full bg-blue-600" aria-hidden="true" />
+                    Digital marketing, web design &amp; printing agency in Ludhiana
+                  </span>
+                </span>
+              </span>
               {['Your Ideas.', 'Our Craft.', <CoverDemo key="cover" />].map((line, i) => (
-                <div key={i} className="overflow-hidden">
-                  <motion.h1
+                <span key={i} className="block overflow-hidden">
+                  <motion.span
                     initial={{ y: 100, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{
@@ -45,7 +53,7 @@ export default function AuroraBackgroundDemo() {
                       delay: 0.25 + i * 0.12,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className={`font-bold leading-[0.95] tracking-tight ${
+                    className={`block font-bold leading-[0.95] tracking-tight ${
                       i === 2 ? "text-indigo-600 dark:text-indigo-400" : "text-zinc-900"
                     }`}
                     style={{
@@ -53,10 +61,10 @@ export default function AuroraBackgroundDemo() {
                     }}
                   >
                     {line}
-                  </motion.h1>
-                </div>
+                  </motion.span>
+                </span>
               ))}
-            </div>
+            </h1>
           </div>
 
           {/* Subtitle & Actions */}
@@ -68,7 +76,7 @@ export default function AuroraBackgroundDemo() {
           >
             <div className="flex flex-col items-start gap-6 max-w-xl">
               <p className="text-lg sm:text-[21px] leading-[1.65] text-zinc-900 font-normal">
-                We design, build websites, run ads across Google & Meta, and print everything your brand needs to grow.
+                We design, build websites, run ads across Google, YouTube & Meta, and print everything your brand needs to grow.
               </p>
               <div>
                 <a href="#contact">
