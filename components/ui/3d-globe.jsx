@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useMemo, useState, useCallback, Suspense } from "react";
+import React, { useRef, useMemo, useState, Suspense } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Html, useTexture } from "@react-three/drei";
+import { OrbitControls, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { cn } from "@/lib/utils";
 
@@ -33,17 +33,24 @@ function latLngToVector3(lat, lng, radius) {
   return new THREE.Vector3(x, y, z);
 }
 
+// Pin line + surface anchor in 3D. The avatar itself lives in a plain DOM
+// overlay (see MarkerOverlay) that this component positions every frame.
+// We deliberately avoid drei's <Html>: it mounts a separate React root per
+// marker and unmounts it synchronously, which triggers React's
+// "Attempted to synchronously unmount a root while React was already rendering" warning.
+const _projected = new THREE.Vector3();
+const _worldPos = new THREE.Vector3();
+
 function Marker({
   marker,
+  index,
   radius,
-  onClick,
-  onHover,
+  hovered,
+  avatarsRef,
 }) {
-  const [hovered, setHovered] = useState(false);
   const groupRef = useRef(null);
   const surfaceMeshRef = useRef(null);
-  const htmlDivRef = useRef(null);
-  const { camera } = useThree();
+  const { camera, size } = useThree();
 
   // Surface position (where pin touches the globe)
   const surfacePosition = useMemo(() => {
@@ -70,40 +77,28 @@ function Marker({
   useFrame(() => {
     if (!surfaceMeshRef.current || !groupRef.current) return;
 
-    const worldPos = new THREE.Vector3();
-    surfaceMeshRef.current.getWorldPosition(worldPos);
-
-    const markerDir = worldPos.clone().normalize();
-    const camDir = camera.position.clone().normalize();
-    const dot = markerDir.dot(camDir);
-
+    surfaceMeshRef.current.getWorldPosition(_worldPos);
+    const dot = _worldPos.normalize().dot(_projected.copy(camera.position).normalize());
     const isFacing = dot > 0.05;
 
     if (groupRef.current.visible !== isFacing) {
       groupRef.current.visible = isFacing;
     }
-    if (htmlDivRef.current) {
-      htmlDivRef.current.style.display = isFacing ? "block" : "none";
+
+    const el = avatarsRef.current[index];
+    if (!el) return;
+    if (!isFacing) {
+      if (el.style.display !== "none") el.style.display = "none";
+      return;
     }
+
+    // Project the avatar anchor to canvas pixels.
+    groupRef.current.localToWorld(_projected.copy(topPosition)).project(camera);
+    const x = (_projected.x * 0.5 + 0.5) * size.width;
+    const y = (-_projected.y * 0.5 + 0.5) * size.height;
+    el.style.display = "block";
+    el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
   });
-
-  const handlePointerEnter = useCallback(() => {
-    setHovered(true);
-    onHover?.(marker);
-  }, [marker, onHover]);
-
-  const handlePointerLeave = useCallback(() => {
-    setHovered(false);
-    onHover?.(null);
-  }, [onHover]);
-
-  const handleClick = useCallback(
-    (e) => {
-      e?.stopPropagation?.();
-      onClick?.(marker);
-    },
-    [marker, onClick]
-  );
 
   return (
     <group ref={groupRef} visible={true}>
@@ -122,49 +117,81 @@ function Marker({
         <sphereGeometry args={[0.022, 16, 16]} />
         <meshBasicMaterial color="#ef4444" />
       </mesh>
-
-      {/* Circular avatar placed exactly at topPosition */}
-      <group position={topPosition}>
-        <Html center style={{ pointerEvents: "auto" }}>
-          <div
-            ref={htmlDivRef}
-            onClick={handleClick}
-            onMouseEnter={handlePointerEnter}
-            onMouseLeave={handlePointerLeave}
-            className={cn(
-              "relative cursor-pointer rounded-full transition-transform duration-200 select-none",
-              hovered ? "scale-125 z-50 ring-2 ring-blue-500 shadow-xl" : "hover:scale-110 shadow-md"
-            )}
-            style={{
-              width: "32px",
-              height: "32px",
-              display: "block",
-            }}
-          >
-            <img
-              src={marker.src}
-              alt={marker.label || "Marker"}
-              className="h-full w-full rounded-full object-cover border-2 border-white bg-zinc-900 shadow-sm"
-              draggable={false}
-            />
-            {/* Tooltip on hover */}
-            {hovered && marker.label && (
-              <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-zinc-900 text-white text-[10px] font-semibold whitespace-nowrap shadow-md pointer-events-none z-50">
-                {marker.label}
-              </div>
-            )}
-          </div>
-        </Html>
-      </group>
     </group>
   );
+}
+
+// Avatars rendered in the normal React tree, on top of the canvas.
+function MarkerOverlay({ markers, hoveredIndex, setHoveredIndex, avatarsRef, onMarkerClick, onMarkerHover }) {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      {markers.map((marker, index) => {
+        const hovered = hoveredIndex === index;
+        return (
+          <div
+            key={`overlay-${index}-${marker.lat}-${marker.lng}`}
+            ref={(el) => {
+              avatarsRef.current[index] = el;
+            }}
+            className={cn("absolute left-0 top-0 pointer-events-auto will-change-transform", hovered ? "z-50" : "z-10")}
+            style={{ display: "none" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onMarkerClick?.(marker);
+            }}
+            onMouseEnter={() => {
+              setHoveredIndex(index);
+              onMarkerHover?.(marker);
+            }}
+            onMouseLeave={() => {
+              setHoveredIndex(null);
+              onMarkerHover?.(null);
+            }}
+          >
+            <div
+              className={cn(
+                "relative cursor-pointer rounded-full transition-transform duration-200 select-none",
+                hovered ? "scale-125 ring-2 ring-blue-500 shadow-xl" : "hover:scale-110 shadow-md"
+              )}
+              style={{ width: "32px", height: "32px" }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={marker.src}
+                alt={marker.label || "Marker"}
+                className="h-full w-full rounded-full object-cover border-2 border-white bg-zinc-900 shadow-sm"
+                draggable={false}
+              />
+              {hovered && marker.label && (
+                <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-zinc-900 text-white text-[10px] font-semibold whitespace-nowrap shadow-md pointer-events-none">
+                  {marker.label}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function configureTextures(earth, bump) {
+  if (earth) {
+    earth.colorSpace = THREE.SRGBColorSpace;
+    earth.anisotropy = 16;
+    earth.needsUpdate = true;
+  }
+  if (bump) {
+    bump.anisotropy = 8;
+    bump.needsUpdate = true;
+  }
 }
 
 function RotatingGlobe({
   config,
   markers,
-  onMarkerClick,
-  onMarkerHover,
+  hoveredIndex,
+  avatarsRef,
 }) {
   const groupRef = useRef(null);
 
@@ -174,15 +201,9 @@ function RotatingGlobe({
     config.bumpMapUrl,
   ]);
 
-  // Configure textures
-  useMemo(() => {
-    if (earthTexture) {
-      earthTexture.colorSpace = THREE.SRGBColorSpace;
-      earthTexture.anisotropy = 16;
-    }
-    if (bumpTexture) {
-      bumpTexture.anisotropy = 8;
-    }
+  // Configure textures once loaded (three.js objects are mutable by design).
+  React.useLayoutEffect(() => {
+    configureTextures(earthTexture, bumpTexture);
   }, [earthTexture, bumpTexture]);
 
   // Create geometries
@@ -224,9 +245,10 @@ function RotatingGlobe({
         <Marker
           key={`marker-${index}-${marker.lat}-${marker.lng}`}
           marker={marker}
+          index={index}
           radius={config.radius}
-          onClick={onMarkerClick}
-          onHover={onMarkerHover}
+          hovered={hoveredIndex === index}
+          avatarsRef={avatarsRef}
         />
       ))}
     </group>
@@ -285,8 +307,8 @@ function Atmosphere({
 function Scene({
   markers,
   config,
-  onMarkerClick,
-  onMarkerHover,
+  hoveredIndex,
+  avatarsRef,
 }) {
   const { camera } = useThree();
 
@@ -315,8 +337,8 @@ function Scene({
       <RotatingGlobe
         config={config}
         markers={markers}
-        onMarkerClick={onMarkerClick}
-        onMarkerHover={onMarkerHover}
+        hoveredIndex={hoveredIndex}
+        avatarsRef={avatarsRef}
       />
 
       {/* Atmosphere (only when explicitly enabled) */}
@@ -385,6 +407,8 @@ export function Globe3D({
     () => ({ ...defaultConfig, ...config }),
     [config]
   );
+  const avatarsRef = useRef([]);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
     <div className={cn("relative h-[500px] w-full", className)}>
@@ -410,11 +434,19 @@ export function Globe3D({
           <Scene
             markers={markers}
             config={mergedConfig}
-            onMarkerClick={onMarkerClick}
-            onMarkerHover={onMarkerHover}
+            hoveredIndex={hoveredIndex}
+            avatarsRef={avatarsRef}
           />
         </Suspense>
       </Canvas>
+      <MarkerOverlay
+        markers={markers}
+        hoveredIndex={hoveredIndex}
+        setHoveredIndex={setHoveredIndex}
+        avatarsRef={avatarsRef}
+        onMarkerClick={onMarkerClick}
+        onMarkerHover={onMarkerHover}
+      />
     </div>
   );
 }
