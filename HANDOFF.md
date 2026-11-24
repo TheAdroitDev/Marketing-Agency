@@ -2,12 +2,12 @@
 
 Current state of the AK Prints site. Update this at the end of every working session: move finished items to "Done", add new decisions and open items.
 
-_Last updated: 2026-11-22_
+_Last updated: 2026-11-24_
 
 ## Status
 
 - Full SEO / AEO / GEO build is done: 46 statically generated pages, `pnpm build` passes.
-- **Not committed yet.** All SEO work is uncommitted on `main`.
+- SEO work is committed on `main`.
 - Live domain: `https://akprints.online` (canonical). The site also runs at `agency.theadroitdev.com` for testing; Google will treat `akprints.online` as the real site.
 
 ## Site map
@@ -62,3 +62,11 @@ _Last updated: 2026-11-22_
 - robots.txt explicitly allows AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, etc.) for GEO.
 - Remaining console notice: `THREE.Clock` deprecation from `@react-three/fiber` itself. Harmless; it goes away when the library is updated.
 - Whole-repo `pnpm lint` fails on old errors in unused UI demo components (`components/ui/cover.jsx` etc.); all files touched in the SEO work lint clean.
+- Navbar (2026-11-24): top-level desktop nav items only change text color on hover. A sliding background pill was tried and removed at the owner's request; the sliding pill stays inside the dropdown panels only.
+- Navbar icons: each service has an isometric icon (`IconTile` in `components/site/navbar.jsx`): three stacked slabs in CSS 3D (rotateX 55° / rotateZ -45°, no perspective) with a Tabler glyph on top. Grey at rest; on hover the slabs lift apart and take the service color. Icon + color live in the `serviceIcons` map, keyed by slug as `[Icon, color]` (ad services use Google / YouTube / Meta marks and brand colors). **A new service needs an entry there**, otherwise it falls back to a dot and grey.
+- Mobile menu (below `lg`) is an accordion: only Web / Marketing / Design / Print / Results / Pricing at first; tapping a group expands its services (one open at a time). Closes on link tap, Escape, or resizing to desktop. The Print dropdown on desktop opens right-aligned so it never runs off a 1024px screen. The menu ends with the same magnetic "Book a Call" button as the hero; it scrolls to `#contact` on the current page (after the menu closes) or goes to `/#contact`.
+
+### Site rework in progress (started 2026-11-24)
+Owner is going through the site piece by piece. Navbar is done. Next, as flagged by the owner:
+- [ ] `/services/website-design-development` (and the other service pages): weak design, FAQs not relevant enough, feels laggy. Rework the content, FAQs and layout.
+- [ ] Performance: the footer globe (three.js) is the likely cause of the lag; consider lazy-mounting it only near the viewport or a lighter fallback.
